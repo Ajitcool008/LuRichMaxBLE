@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:lurichmaxble/authention/create_profile_view.dart';
-import 'package:lurichmaxble/authention/sign_up_1_view.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 

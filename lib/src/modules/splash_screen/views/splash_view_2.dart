@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view_3.dart';
 
 class SplashView2 extends StatelessWidget {
@@ -7,7 +6,7 @@ class SplashView2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
+    // double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Center(

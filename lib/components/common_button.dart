@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lurichmaxble/components/app_colors.dart';
 
 class CommonButton extends StatelessWidget {
   final String buttonText;

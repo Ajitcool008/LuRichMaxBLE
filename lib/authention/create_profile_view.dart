@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/authention/forgot_password.dart';
-import 'package:lurichmaxble/authention/sign_up_1_view.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/input_text_field.dart';
-import 'package:lurichmaxble/components/top_image_login.dart';
 
 class CreateProfileView extends StatefulWidget {
   const CreateProfileView({super.key});

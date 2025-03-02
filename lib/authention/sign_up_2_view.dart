@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lurichmaxble/authention/sign_up_1_view.dart';
 import 'package:lurichmaxble/authention/verify_otp_view.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
