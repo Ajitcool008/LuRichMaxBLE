@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view_2.dart';
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
   @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SplashView2()),
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.blueAccent,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Welcome to LuRichMaxBLE',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 20.0),
-            SpinKitFadingCircle(color: Colors.white, size: 50.0),
-          ],
+      body: SizedBox(
+        height: height / 1,
+        width: width / 1,
+        child: Image.asset(
+          "assets/images/splash_screen1.png",
+          fit: BoxFit.cover,
         ),
       ),
     );
