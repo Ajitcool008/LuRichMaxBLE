@@ -5,8 +5,12 @@ class InputTextField extends StatelessWidget {
   final String hintText;
   final bool? isObsecure;
   final Widget? suffixWidget;
-  const InputTextField(
-      {super.key, required this.hintText, this.isObsecure, this.suffixWidget});
+  const InputTextField({
+    super.key,
+    required this.hintText,
+    this.isObsecure,
+    this.suffixWidget,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +20,10 @@ class InputTextField extends StatelessWidget {
         suffixIcon: suffixWidget,
         hintText: hintText,
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            width: 1,
-            color: AppColors.inputBorderColor,
-          ),
+          borderSide: BorderSide(width: 1, color: AppColors.inputBorderColor),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: AppColors.inputBorderColor),
         ),
         border: OutlineInputBorder(
           borderSide: BorderSide(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
-import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view.dart';
+import 'package:lurichmaxble/src/modules/home_screen/views/my_task_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primaryColor: AppColors.appColor,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: SplashView(),
+      home: MyTask(),
     );
   }
 }
