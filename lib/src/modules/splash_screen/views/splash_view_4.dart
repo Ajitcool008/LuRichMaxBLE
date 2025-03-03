@@ -24,20 +24,13 @@ class SplashView4 extends StatelessWidget {
                 backgroundImage: AssetImage("assets/images/splash4.png"),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Text(
               textAlign: TextAlign.center,
               "Your Convenience, \n Our Priority",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            SizedBox(height: 10),
             Text(
               textAlign: TextAlign.center,
               "Enjoy top-quality service at your fingertips. We \n handle the details so you can focus on what \n matters most.",
@@ -47,15 +40,9 @@ class SplashView4 extends StatelessWidget {
                 color: Color(0xff677294),
               ),
             ),
-            SizedBox(
-              height: height * 0.05,
-            ),
-            Center(
-              child: Image.asset("assets/icons/splash_dot3.png"),
-            ),
-            SizedBox(
-              height: height * 0.1,
-            ),
+            SizedBox(height: height * 0.05),
+            Center(child: Image.asset("assets/icons/splash_dot3.png")),
+            SizedBox(height: height * 0.1),
             CommonButton(
               buttonTextColor: Colors.white,
               buttonColor: AppColors.appColor,

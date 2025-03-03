@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view.dart';
 
 void main() {
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.white),
         scaffoldBackgroundColor: Colors.white,
+        primaryColor: AppColors.appColor,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       home: SplashView(),

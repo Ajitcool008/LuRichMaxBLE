@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lurichmaxble/authention/sign_up_2_view.dart';
+import 'package:lurichmaxble/authention/login_view.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/top_image_login.dart';
@@ -12,8 +12,8 @@ class SignUp1View extends StatefulWidget {
 }
 
 class _SignUp1ViewState extends State<SignUp1View> {
-  bool selectContainer1 = false;
-  bool selectContainer2 = false;
+  bool selectContainer1 = true;
+  bool selectContainer2 = true;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -24,7 +24,7 @@ class _SignUp1ViewState extends State<SignUp1View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TopImageLogin(
-            imageHeight: height / 2,
+            imageHeight: height * 0.4,
             topImage: "assets/images/signup_or_servicescreen.png",
           ),
           Padding(
@@ -32,19 +32,12 @@ class _SignUp1ViewState extends State<SignUp1View> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 10),
                 Text(
                   "I am",
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 10),
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -54,14 +47,15 @@ class _SignUp1ViewState extends State<SignUp1View> {
                   },
                   child: Container(
                     width: width / 1,
-                    height: height / 7,
+                    height: height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: selectContainer1
-                            ? Color(0xffD8D8D8)
-                            : Colors.blueAccent,
+                        color:
+                            selectContainer1
+                                ? Color(0xffD8D8D8)
+                                : Colors.blueAccent,
                       ),
                     ),
                     child: Row(
@@ -73,9 +67,7 @@ class _SignUp1ViewState extends State<SignUp1View> {
                           children: [
                             Text(
                               "Service Provider",
-                              style: TextStyle(
-                                fontSize: 24,
-                              ),
+                              style: TextStyle(fontSize: 24),
                             ),
                             Text(
                               "I Offer Professional Services..",
@@ -90,9 +82,7 @@ class _SignUp1ViewState extends State<SignUp1View> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     setState(() {
@@ -102,14 +92,15 @@ class _SignUp1ViewState extends State<SignUp1View> {
                   },
                   child: Container(
                     width: width / 1,
-                    height: height / 7,
+                    height: height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: selectContainer2
-                            ? Color(0xffD8D8D8)
-                            : Colors.blueAccent,
+                        color:
+                            selectContainer2
+                                ? Color(0xffD8D8D8)
+                                : Colors.blueAccent,
                       ),
                     ),
                     child: Row(
@@ -121,9 +112,7 @@ class _SignUp1ViewState extends State<SignUp1View> {
                           children: [
                             Text(
                               "Looking for service",
-                              style: TextStyle(
-                                fontSize: 24,
-                              ),
+                              style: TextStyle(fontSize: 24),
                             ),
                             Text(
                               "I am looking for home services.",
@@ -141,33 +130,28 @@ class _SignUp1ViewState extends State<SignUp1View> {
               ],
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Align(
             alignment: Alignment.center,
             child: CommonButton(
-                buttonTextColor: Colors.white,
-                buttonColor: AppColors.appColor,
-                buttonText: "SIGN UP",
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => SignUp2View()));
-                },
-                buttonWidth: width * 0.91),
+              buttonTextColor: Colors.white,
+              buttonColor: AppColors.appColor,
+              buttonText: "SIGN IN",
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => LoginView()));
+              },
+              buttonWidth: width * 0.91,
+            ),
           ),
-          SizedBox(
-            height: height * 0.12,
-          ),
+          SizedBox(height: height * 0.1),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "You have an Account? ",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               Text(
                 "Sign In",

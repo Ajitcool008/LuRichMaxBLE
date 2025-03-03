@@ -25,7 +25,7 @@ class _SignUp2ViewState extends State<SignUp2View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TopImageLogin(
-            imageHeight: height / 2,
+            imageHeight: height * 0.4,
             topImage: "assets/images/signup_or_servicescreen.png",
           ),
           Padding(
@@ -33,59 +33,39 @@ class _SignUp2ViewState extends State<SignUp2View> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 20),
                 Text(
                   "Signup",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  "Sign Up to your account",
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
+                Text("Sign Up to your account", style: TextStyle(fontSize: 14)),
+                SizedBox(height: 20),
                 Text(
                   "Mobile Number",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.blueGrey,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                 ),
-                SizedBox(
-                  height: 5,
-                ),
+                SizedBox(height: 5),
                 InputTextField(hintText: "Enter Mobile Number"),
               ],
             ),
           ),
-          SizedBox(
-            height: 30,
-          ),
+          SizedBox(height: 30),
           Align(
             alignment: Alignment.center,
             child: CommonButton(
-                buttonTextColor: Colors.white,
-                buttonColor: AppColors.appColor,
-                buttonText: "SIGN IN",
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const VerifyOtp()),
-                  );
-                },
-                buttonWidth: width * 0.91),
+              buttonTextColor: Colors.white,
+              buttonColor: AppColors.appColor,
+              buttonText: "SIGN IN",
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VerifyOtp()),
+                );
+              },
+              buttonWidth: width * 0.91,
+            ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: Row(
@@ -93,59 +73,56 @@ class _SignUp2ViewState extends State<SignUp2View> {
                 Transform.scale(
                   scale: 1.3,
                   child: Checkbox(
-                      activeColor: AppColors.appColor,
-                      shape: CircleBorder(),
-                      value: isCheckBox,
-                      onChanged: (value) {
-                        setState(() {
-                          isCheckBox = !isCheckBox;
-                        });
-                      }),
+                    activeColor: AppColors.appColor,
+                    shape: CircleBorder(),
+                    value: isCheckBox,
+                    onChanged: (value) {
+                      setState(() {
+                        isCheckBox = !isCheckBox;
+                      });
+                    },
+                  ),
                 ),
                 RichText(
                   text: TextSpan(
                     children: const <TextSpan>[
                       TextSpan(
-                          text: 'I accept the ',
-                          style: TextStyle(color: Colors.black)),
+                        text: 'I accept the ',
+                        style: TextStyle(color: Colors.black),
+                      ),
                       TextSpan(
-                          text: 'Terms & Conditions and Privacy Policy',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.underline,
-                          )),
+                        text: 'Terms & Conditions and Privacy Policy',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
-          SizedBox(
-            height: 20,
-          ),
+          SizedBox(height: 20),
           Center(
             child: Card(
               child: CommonButton(
-                  buttonTextColor: AppColors.appColor,
-                  buttonText: "Continue as a Guest",
-                  onTap: () {},
-                  buttonWidth: width / 1.5,
-                  buttonColor: Colors.transparent),
+                buttonTextColor: AppColors.appColor,
+                buttonText: "Continue as a Guest",
+                onTap: () {},
+                buttonWidth: width / 1.5,
+                buttonColor: Colors.transparent,
+              ),
             ),
           ),
-          SizedBox(
-            height: height / 9,
-          ),
+          SizedBox(height: height / 9),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 "You Have an Account? ",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               Text(
                 "Sign in",
