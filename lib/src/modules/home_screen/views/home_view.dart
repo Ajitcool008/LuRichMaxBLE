@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
+import 'package:lurichmaxble/src/modules/create_request/views/form_list_screen.dart';
+import 'package:lurichmaxble/src/modules/home_screen/views/my_task_view.dart';
+import 'package:lurichmaxble/src/modules/home_screen/views/proposal_view.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
 class HomeView extends StatefulWidget {
@@ -31,8 +34,8 @@ class HomeViewState extends State<HomeView> {
       HomePage(
         initialSearchQuery: widget.initialSearchQuery,
       ), // ✅ Use widget.initialSearchQuery
-      SearchPage(),
-      TaskPage(),
+      ProposalView(),
+      MyTask(),
       ProfilePage(),
     ];
   }
@@ -321,7 +324,10 @@ class _HomePageState extends State<HomePage> {
           height: 60,
           child: ElevatedButton(
             onPressed: () {
-              // Add action here
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FormsListScreen()),
+              );
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff283891), // Your theme color

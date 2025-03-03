@@ -13,30 +13,30 @@ class MyTask extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 40),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Image.asset("assets/icons/proposal_screen_appbar.dart.png"),
-                SizedBox(width: 10),
-                Text(
-                  "Flat- 209, Kavuri Hills, Madhapur, Telangana\n500033",
-                  style: TextStyle(fontSize: 13, color: Color(0xff757575)),
-                ),
-                SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: Card(
-                    color: Colors.white,
-                    child: Image.asset(
-                      "assets/icons/proposal_app_bar_icon2.png",
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       Image.asset("assets/icons/proposal_screen_appbar.dart.png"),
+          //       SizedBox(width: 10),
+          //       Text(
+          //         "Flat- 209, Kavuri Hills, Madhapur, Telangana\n500033",
+          //         style: TextStyle(fontSize: 13, color: Color(0xff757575)),
+          //       ),
+          //       SizedBox(
+          //         height: 50,
+          //         width: 50,
+          //         child: Card(
+          //           color: Colors.white,
+          //           child: Image.asset(
+          //             "assets/icons/proposal_app_bar_icon2.png",
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
