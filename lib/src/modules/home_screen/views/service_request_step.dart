@@ -96,12 +96,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         // Handle the next action, e.g., navigate to another screen
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => HomeView(
-                                  initialSearchQuery: _serviceController.text,
-                                ),
-                          ),
+                          MaterialPageRoute(builder: (context) => HomeView()),
                           (route) => false,
                         );
                       }

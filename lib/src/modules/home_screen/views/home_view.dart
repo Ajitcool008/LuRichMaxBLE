@@ -7,8 +7,7 @@ import 'package:lurichmaxble/src/modules/home_screen/views/proposal_view.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
 class HomeView extends StatefulWidget {
-  final String initialSearchQuery;
-  const HomeView({super.key, required this.initialSearchQuery});
+  const HomeView({super.key});
 
   @override
   HomeViewState createState() => HomeViewState();
@@ -27,12 +26,7 @@ class HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _pages = [
-      HomePage(initialSearchQuery: widget.initialSearchQuery),
-      ProposalView(),
-      MyTask(),
-      ProfilePage(),
-    ];
+    _pages = [HomePage(), ProposalView(), MyTask(), ProfilePage()];
   }
 
   @override
@@ -122,15 +116,14 @@ class HomeViewState extends State<HomeView> {
 }
 
 class HomePage extends StatefulWidget {
-  final String initialSearchQuery;
-  const HomePage({super.key, required this.initialSearchQuery});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late TextEditingController _searchController;
+  TextEditingController _searchController = TextEditingController();
   String _selectedQuery = "";
 
   final List<Map<String, String>> _requests = [
@@ -316,8 +309,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _searchController = TextEditingController(text: widget.initialSearchQuery);
-    _selectedQuery = widget.initialSearchQuery;
     _filterResults();
   }
 

@@ -53,11 +53,20 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
     'Item(s) photo Image',
   ];
 
+  final List<String> _adultChoose = [
+    'Kid(s)',
+    'Adult(s)',
+    'Senior(s)',
+    'Teen(s)',
+    'people(s)',
+  ];
+
   final List<String> _itemsNames = ['Advert(s)', 'Items(s) for Advert'];
 
   String? _selectedTrade;
   String? _selectedItemName;
   String? _selectedTask;
+  String? _selectedadult;
 
   bool _isButtonEnabled = true;
 
@@ -208,6 +217,32 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                         child: Text(value),
                       );
                     }).toList(),
+              ),
+              InputTextField(hintText: "Enter manually the task or service"),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Text("Number of"),
+                  SizedBox(width: 8),
+                  DropdownButton<String>(
+                    value: _selectedadult,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedadult = newValue!;
+                      });
+                    },
+                    hint: const Text('Choose from options e.g: adults'),
+                    items:
+                        _adultChoose.map<DropdownMenuItem<String>>((
+                          String value,
+                        ) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                  ),
+                ],
               ),
               InputTextField(hintText: "Enter manually the task or service"),
             ] else
