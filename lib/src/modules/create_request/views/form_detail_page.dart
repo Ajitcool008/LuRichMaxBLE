@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lurichmaxble/components/input_text_field.dart';
 
 class FormDetailScreen extends StatefulWidget {
   final String formTitle;
@@ -13,32 +15,51 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
       TextEditingController();
   final TextEditingController _tradeProfessionController =
       TextEditingController();
+  final TextEditingController _roleSpecialityController =
+      TextEditingController();
 
   final List<String> _services = [
-    'Painting Service',
-    'Plumbing Service',
-    'Electrician Service',
-    'Carpenter Service',
-    'Mechanic Service',
-    'Gardening Service',
-    'House Cleaning Service',
-    'Driver Service',
-    'Masonry Service',
-    'Welding Service',
+    'Plumbing service(s)',
+    'Painter service(s)',
+    'Electrician service(s)',
+    'Carpenter service(s)',
+    'Mechanic service(s)',
+    'Gardener service(s)',
+    'House service(s) Cleaning',
+    'Driver service(s)',
+    'Mason service(s)',
+    'Welder service(s)',
   ];
 
   final List<String> _trades = [
-    'Painter',
-    'Plumber',
-    'Electrician',
-    'Carpenter',
-    'Mechanic',
-    'Gardener',
-    'Cleaner',
-    'Driver',
-    'Mason',
-    'Welder',
+    'Trade(s)',
+    'Profession(s)',
+    'Role(s)',
+    'Speciality(s)',
   ];
+
+  final List<String> _roles = [
+    'Painter',
+    'Plasterer',
+    'Brick Layer',
+    'Plumber',
+  ];
+
+  final List<String> _tasksChoose = [
+    'Services(s) to render',
+    'Service(s) required',
+    'Task(s)',
+    'Duty(s)',
+    'Item(s) photo Image',
+  ];
+
+  final List<String> _itemsNames = ['Advert(s)', 'Items(s) for Advert'];
+
+  String? _selectedTrade;
+  String? _selectedItemName;
+  String? _selectedTask;
+
+  bool _isButtonEnabled = true;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +122,21 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
               ),
               const SizedBox(height: 16),
 
-              const Text(
-                "Search for trade and profession:",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              DropdownButton<String>(
+                value: _selectedTrade,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedTrade = newValue!;
+                  });
+                },
+                hint: const Text('Choose for profession:'),
+                items:
+                    _trades.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
               ),
               const SizedBox(height: 8),
               Autocomplete<String>(
@@ -111,7 +144,7 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                   if (textEditingValue.text.isEmpty) {
                     return const Iterable<String>.empty();
                   }
-                  return _trades.where((String option) {
+                  return _roles.where((String option) {
                     return option.toLowerCase().contains(
                       textEditingValue.text.toLowerCase(),
                     );
@@ -119,7 +152,7 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                 },
                 onSelected: (String selection) {
                   setState(() {
-                    _tradeProfessionController.text = selection;
+                    _roleSpecialityController.text = selection;
                   });
                 },
                 fieldViewBuilder: (
@@ -141,34 +174,95 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                 },
               ),
               const SizedBox(height: 16),
-            ] else ...[
-              const Text("This form will contain other fields"),
-            ],
+
+              DropdownButton<String>(
+                value: _selectedItemName,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedItemName = newValue!;
+                  });
+                },
+                hint: const Text('Choose e.g: item(s) or Advert(s)'),
+                items:
+                    _itemsNames.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+              ),
+              InputTextField(hintText: "Enter Item Name e.g: truck or advert"),
+            ] else if (widget.formTitle == "Choose a Task") ...[
+              DropdownButton<String>(
+                value: _selectedTask,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedTask = newValue!;
+                  });
+                },
+                hint: const Text('Choose e.g: Task(s) or Service(s)'),
+                items:
+                    _tasksChoose.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+              ),
+              InputTextField(hintText: "Enter manually the task or service"),
+            ] else
+              ...[],
 
             const Spacer(),
 
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Submit form action
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        '${widget.formTitle} submitted successfully!',
-                      ),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed:
+                        _isButtonEnabled
+                            ? () {
+                              // Submit form action
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    '${widget.formTitle} submitted successfully!',
+                                  ),
+                                ),
+                              );
+                              Get.back();
+                            }
+                            : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: const Text(
+                      'Submit',
+                      style: TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
                 ),
-                child: const Text(
-                  'Submit',
-                  style: TextStyle(fontSize: 16, color: Colors.white),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _isButtonEnabled = !_isButtonEnabled;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:
+                          _isButtonEnabled ? Colors.red : Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: Text(
+                      _isButtonEnabled ? 'Disable' : 'Enable',
+                      style: const TextStyle(fontSize: 16, color: Colors.white),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view.dart';
 
@@ -11,9 +12,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Lurichmaxble',
       theme: ThemeData(
         appBarTheme: AppBarTheme(color: Colors.white),
         scaffoldBackgroundColor: Colors.white,

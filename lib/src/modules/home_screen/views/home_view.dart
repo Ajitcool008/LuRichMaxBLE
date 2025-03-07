@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/src/modules/create_request/views/form_list_screen.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/my_task_view.dart';
@@ -14,9 +15,7 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
-  // List of widgets for each page
   late List<Widget> _pages;
-
   int _selectedIndex = 0;
 
   void changeTab(int index) {
@@ -28,12 +27,8 @@ class HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-
-    // Initialize _pages inside initState()
     _pages = [
-      HomePage(
-        initialSearchQuery: widget.initialSearchQuery,
-      ), // ✅ Use widget.initialSearchQuery
+      HomePage(initialSearchQuery: widget.initialSearchQuery),
       ProposalView(),
       MyTask(),
       ProfilePage(),
@@ -43,52 +38,89 @@ class HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Display the selected page
-      bottomNavigationBar: ResponsiveNavigationBar(
-        selectedIndex: _selectedIndex,
-        onTabChange: changeTab,
-        backgroundColor: AppColors.appColor,
-        // showActiveButtonText: false,
-        textStyle: const TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-        navigationBarButtons: const <NavigationBarButton>[
-          NavigationBarButton(
-            text: 'Feed',
-            icon: Icons.home,
-            backgroundGradient: LinearGradient(
-              colors: [Colors.yellow, Colors.green, Colors.blue],
-            ),
-          ),
-          NavigationBarButton(
-            text: 'Purposal',
-            icon: Icons.work_outline,
-            backgroundGradient: LinearGradient(
-              colors: [Colors.cyan, Colors.teal],
-            ),
-          ),
-          NavigationBarButton(
-            text: 'My Tasks',
-            icon: Icons.task,
-            backgroundGradient: LinearGradient(
-              colors: [Colors.green, Colors.yellow],
-            ),
-          ),
-          NavigationBarButton(
-            text: 'More',
-            icon: Icons.grid_view,
-            backgroundGradient: LinearGradient(
-              colors: [Colors.green, Colors.yellow],
-            ),
-          ),
-        ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          if (constraints.maxWidth > 800) {
+            // Web layout
+            return Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: _selectedIndex,
+                  onDestinationSelected: changeTab,
+                  labelType: NavigationRailLabelType.all,
+                  destinations: const [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.home),
+                      label: Text('Feed'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.work_outline),
+                      label: Text('Proposal'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.task),
+                      label: Text('My Tasks'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.grid_view),
+                      label: Text('More'),
+                    ),
+                  ],
+                ),
+                Expanded(child: _pages[_selectedIndex]),
+              ],
+            );
+          } else {
+            // Mobile layout
+            return Scaffold(
+              body: _pages[_selectedIndex],
+              bottomNavigationBar: ResponsiveNavigationBar(
+                selectedIndex: _selectedIndex,
+                onTabChange: changeTab,
+                backgroundColor: AppColors.appColor,
+                textStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+                navigationBarButtons: const <NavigationBarButton>[
+                  NavigationBarButton(
+                    text: 'Feed',
+                    icon: Icons.home,
+                    backgroundGradient: LinearGradient(
+                      colors: [Colors.yellow, Colors.green, Colors.blue],
+                    ),
+                  ),
+                  NavigationBarButton(
+                    text: 'Proposal',
+                    icon: Icons.work_outline,
+                    backgroundGradient: LinearGradient(
+                      colors: [Colors.cyan, Colors.teal],
+                    ),
+                  ),
+                  NavigationBarButton(
+                    text: 'My Tasks',
+                    icon: Icons.task,
+                    backgroundGradient: LinearGradient(
+                      colors: [Colors.green, Colors.yellow],
+                    ),
+                  ),
+                  NavigationBarButton(
+                    text: 'More',
+                    icon: Icons.grid_view,
+                    backgroundGradient: LinearGradient(
+                      colors: [Colors.green, Colors.yellow],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
       ),
     );
   }
 }
 
-// Example pages
 class HomePage extends StatefulWidget {
   final String initialSearchQuery;
   const HomePage({super.key, required this.initialSearchQuery});
@@ -315,32 +347,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return DefaultTabController(
-      length: 2, // Two tabs (Requests & Profiles)
+      length: 2,
       child: Scaffold(
         appBar: AppBar(title: Text("${_searchController.text} Request")),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: SizedBox(
-          width: width * 0.8, // Full width button
+          width: width * 0.8,
           height: 60,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => FormsListScreen()),
-              );
+              Get.to(() => FormsListScreen());
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xff283891), // Your theme color
+              backgroundColor: const Color(0xff283891),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40), // Rounded shape
+                borderRadius: BorderRadius.circular(40),
               ),
               elevation: 8,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.add, size: 28, color: Colors.white),
-                const Text(
+              children: const [
+                Icon(Icons.add, size: 28, color: Colors.white),
+                Text(
                   'Make a request for service',
                   style: TextStyle(
                     fontSize: 14,
@@ -354,7 +383,6 @@ class _HomePageState extends State<HomePage> {
         ),
         body: Column(
           children: [
-            // 🔍 Search Bar with AutoComplete (Gives Suggestions)
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Autocomplete<String>(
@@ -372,7 +400,7 @@ class _HomePageState extends State<HomePage> {
                   setState(() {
                     _searchController.text = selection;
                     _selectedQuery = selection;
-                    _filterResults(); // Filter results after selection
+                    _filterResults();
                   });
                 },
                 fieldViewBuilder: (
@@ -395,8 +423,6 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-
-            // 📌 Tabs
             const TabBar(
               indicatorColor: Colors.blue,
               tabs: [
@@ -404,12 +430,9 @@ class _HomePageState extends State<HomePage> {
                 Tab(icon: Icon(Icons.person), text: "Profiles"),
               ],
             ),
-
-            // 📌 Tabs Content
             Expanded(
               child: TabBarView(
                 children: [
-                  // 📝 Requests Tab (Filtered List)
                   _filteredRequests.isEmpty
                       ? const Center(child: Text("No requests found"))
                       : ListView.builder(
@@ -426,26 +449,114 @@ class _HomePageState extends State<HomePage> {
                               padding: const EdgeInsets.all(12.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "🛠️ ${request['to_render']!}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
+                                children: <Widget>[
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Request: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: request['to_render']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Text("👤 ${request['profession']!}"),
-                                  Text("📜 ${request['services_to_render']!}"),
-                                  Text("📅 ${request['date_time']!}"),
-                                  Text("💰 ${request['charges']!}"),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'To Render: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: request['profession']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'My Profession: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: request['services_to_render']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Service(s) date time: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: request['date_time']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Service(s) charges: ',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: request['charges']!,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           );
                         },
                       ),
-
-                  // 👤 Profiles Tab (Filtered Profiles)
                   _filteredProfiles.isEmpty
                       ? const Center(child: Text("No profiles found"))
                       : ListView.builder(
@@ -461,9 +572,7 @@ class _HomePageState extends State<HomePage> {
                             child: ListTile(
                               leading: CircleAvatar(
                                 backgroundColor: Colors.blue,
-                                child: Text(
-                                  profile['name']![0],
-                                ), // First letter as Avatar
+                                child: Text(profile['name']![0]),
                               ),
                               title: Text(
                                 profile['name']!,
@@ -494,36 +603,8 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Purposal Page',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xff283891),
-      ),
-      body: Center(child: Text('Search Page')),
-    );
-  }
-}
-
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page'));
-  }
-}
-
-class TaskPage extends StatelessWidget {
-  const TaskPage({super.key});
 
   @override
   Widget build(BuildContext context) {
