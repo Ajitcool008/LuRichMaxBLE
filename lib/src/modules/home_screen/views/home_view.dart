@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/src/modules/create_request/views/form_list_screen.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/my_task_view.dart';
+import 'package:lurichmaxble/src/modules/home_screen/views/profile_page.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/proposal_view.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
@@ -594,11 +595,3 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(child: Text('Profile Page'));
-  }
-}
