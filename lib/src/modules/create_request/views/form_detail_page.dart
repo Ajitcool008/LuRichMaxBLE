@@ -11,12 +11,9 @@ class FormDetailScreen extends StatefulWidget {
 }
 
 class _FormDetailScreenState extends State<FormDetailScreen> {
-  final TextEditingController _requestingForController =
-      TextEditingController();
-  final TextEditingController _tradeProfessionController =
-      TextEditingController();
-  final TextEditingController _roleSpecialityController =
-      TextEditingController();
+  final TextEditingController _requestingForController = TextEditingController();
+  final TextEditingController _tradeProfessionController = TextEditingController();
+  final TextEditingController _roleSpecialityController = TextEditingController();
 
   final List<String> _services = [
     'Plumbing service(s)',
@@ -201,7 +198,8 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                     }).toList(),
               ),
               InputTextField(hintText: "Enter Item Name e.g: truck or advert"),
-            ] else if (widget.formTitle == "Choose a Task") ...[
+            ]
+            else if (widget.formTitle == "Choose a Task") ...[
               DropdownButton<String>(
                 value: _selectedTask,
                 onChanged: (String? newValue) {
@@ -244,9 +242,82 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                   ),
                 ],
               ),
+
               InputTextField(hintText: "Enter manually the task or service"),
-            ] else
-              ...[],
+
+              const SizedBox(height: 16),
+
+              InputTextField(hintText: "Enter the Races"),
+
+              const SizedBox(height: 16),
+
+              InputTextField(hintText: "Enter the Gender"),
+
+              const SizedBox(height: 16),
+
+              InputTextField(hintText: "Enter the Ages"),
+
+              const SizedBox(height: 16),
+
+              InputTextField(hintText: "Enter the Species"),
+
+              const SizedBox(height: 16),
+
+              InputTextField(hintText: "Enter the Breed"),
+            ]
+            else if(widget.formTitle == "Date and Time")...[
+                InputTextField(hintText: "Enter the Service"),
+
+                const SizedBox(height: 16),
+
+                InputTextField(hintText: "Enter the Date "),
+
+                const SizedBox(height: 16),
+
+                InputTextField(hintText: "Enter the Time"),
+
+                const SizedBox(height: 16),
+
+                InputTextField(hintText: "Contact me let's discuss on date "),
+
+                const SizedBox(height: 16),
+
+                InputTextField(hintText: "Contact me let's discuss on time'"),
+
+                const SizedBox(height: 16),
+
+            ]
+              else if(widget.formTitle == "Wages and Charges")... [
+                  InputTextField(hintText: "Enter Booking Services"),
+
+                  const SizedBox(height: 16),
+
+                  InputTextField(hintText: "Enter Wages Charges"),
+
+                  const SizedBox(height: 16),
+
+                  InputTextField(hintText: "Enter Wages for per hour"),
+
+                  const SizedBox(height: 16),
+              ]
+                else if(widget.formTitle == "Work Services")... [
+                  InputTextField(hintText: "Enter Work Services"),
+
+                  const SizedBox(height: 16),
+
+                  InputTextField(hintText: "Contact me to Let's agree"),
+
+                  const SizedBox(height: 16),
+
+                  InputTextField(hintText: "Contact me to Let me know"),
+
+                  const SizedBox(height: 16),
+
+                    InputTextField(hintText: "Notify me for consent"),
+
+                    const SizedBox(height: 16),
+                ],
+
 
             const Spacer(),
 
