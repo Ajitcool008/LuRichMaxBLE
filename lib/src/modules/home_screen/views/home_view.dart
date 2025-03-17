@@ -7,6 +7,8 @@ import 'package:lurichmaxble/src/modules/home_screen/views/proposal_view.dart';
 import 'package:lurichmaxble/src/modules/profile/profile_page.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
+import '../../profile/professionals_profile_screen.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
@@ -555,31 +557,39 @@ class _HomePageState extends State<HomePage> {
                         itemCount: _filteredProfiles.length,
                         itemBuilder: (context, index) {
                           var profile = _filteredProfiles[index];
-                          return Card(
-                            margin: const EdgeInsets.all(8),
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.blue,
-                                child: Text(profile['name']![0]),
+                          return InkWell(
+                            onTap: (){
+                              Navigator.push(context,
+                              MaterialPageRoute(builder: (context){
+                                return ProfessionalsProfileScreen();
+                              }));
+                            },
+                            child: Card(
+                              margin: const EdgeInsets.all(8),
+                              elevation: 3,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              title: Text(
-                                profile['name']!,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.blue,
+                                  child: Text(profile['name']![0]),
                                 ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("💼 ${profile['profession']}"),
-                                  Text("💲 ${profile['hourly_rate']}"),
-                                  Text("⭐ Rating: ${profile['rating']}"),
-                                  Text("📜 ${profile['description']}"),
-                                ],
+                                title: Text(
+                                  profile['name']!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("💼 ${profile['profession']}"),
+                                    Text("💲 ${profile['hourly_rate']}"),
+                                    Text("⭐ Rating: ${profile['rating']}"),
+                                    Text("📜 ${profile['description']}"),
+                                  ],
+                                ),
                               ),
                             ),
                           );
