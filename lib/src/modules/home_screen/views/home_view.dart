@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/src/modules/create_request/views/form_list_screen.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/my_task_view.dart';
-import 'package:lurichmaxble/src/modules/profile/profile_page.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/proposal_view.dart';
+import 'package:lurichmaxble/src/modules/profile/profile_page.dart';
 import 'package:responsive_navigation_bar/responsive_navigation_bar.dart';
 
 class HomeView extends StatefulWidget {
@@ -124,7 +124,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   String _selectedQuery = "";
 
   final List<Map<String, String>> _requests = [
@@ -594,4 +594,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-

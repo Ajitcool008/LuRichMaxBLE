@@ -4,7 +4,7 @@ import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/src/modules/home_screen/views/home_view.dart';
 
 class ServiceRequestScreen extends StatefulWidget {
-  const ServiceRequestScreen({Key? key}) : super(key: key);
+  const ServiceRequestScreen({super.key});
 
   @override
   _ServiceRequestScreenState createState() => _ServiceRequestScreenState();

@@ -35,15 +35,12 @@ class CommonButton extends StatelessWidget {
             Text(
               buttonText,
               style: TextStyle(
-                  color: buttonTextColor,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold),
+                color: buttonTextColor,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            Icon(
-              buttonIcon ?? null,
-              color: Colors.white,
-              size: 14,
-            ),
+            Icon(buttonIcon, color: Colors.white, size: 14),
           ],
         ),
       ),
