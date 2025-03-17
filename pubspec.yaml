@@ -39,6 +39,7 @@ dependencies:
   flutter_timer_countdown: ^1.0.7
   flutter_otp_text_field: ^1.1.0+2
   responsive_navigation_bar: ^5.0.2
+  carousel_slider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
