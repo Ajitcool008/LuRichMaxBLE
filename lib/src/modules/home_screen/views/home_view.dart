@@ -441,105 +441,125 @@ class _HomePageState extends State<HomePage> {
                             ),
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Request: ',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: request['to_render']!,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    backgroundColor: Colors.blue,
+                                    child: Text(request['to_render']![0]),
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'To Render: ',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                  const SizedBox(width: 10),
+                                  // Use Flexible to allow text wrapping
+                                  Flexible(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'Request: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: request['to_render']!,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        TextSpan(
-                                          text: request['profession']!,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black,
+                                        RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'To Render: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: request['profession']!,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'My Profession: ',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                        RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'My Profession: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text:
+                                                    request['services_to_render']!,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        TextSpan(
-                                          text: request['services_to_render']!,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black,
+                                        RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'Service(s) date time: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: request['date_time']!,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Service(s) date time: ',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: request['date_time']!,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Service(s) charges: ',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        TextSpan(
-                                          text: request['charges']!,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            color: Colors.black,
+                                        RichText(
+                                          softWrap: true,
+                                          text: TextSpan(
+                                            children: [
+                                              const TextSpan(
+                                                text: 'Service(s) charges: ',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: request['charges']!,
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
@@ -558,11 +578,15 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context, index) {
                           var profile = _filteredProfiles[index];
                           return InkWell(
-                            onTap: (){
-                              Navigator.push(context,
-                              MaterialPageRoute(builder: (context){
-                                return ProfessionalsProfileScreen();
-                              }));
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ProfessionalsProfileScreen();
+                                  },
+                                ),
+                              );
                             },
                             child: Card(
                               margin: const EdgeInsets.all(8),

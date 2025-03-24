@@ -61,6 +61,18 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
     'people(s)',
   ];
 
+  final List<String> _toAttend = [
+    'Needed',
+    'Required',
+    'To attend to',
+    'To need of service(s)',
+  ];
+
+  final List<String> _toContact = [
+    "Let's discuss on date",
+    'Contact me to discuss on date and time',
+  ];
+
   final List<String> _itemsNames = ['Advert(s)', 'Items(s) for Advert'];
 
   String? _selectedTrade;
@@ -69,6 +81,53 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
   String? _selectedadult;
 
   bool _isButtonEnabled = true;
+
+  List<Map<String, dynamic>> _formData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Add initial form data
+    _addNewSet();
+  }
+
+  void _addNewSet() {
+    setState(() {
+      _formData.add({'date': null, 'time': null, 'dropdown': null});
+    });
+  }
+
+  void _removeSet(int index) {
+    setState(() {
+      _formData.removeAt(index);
+    });
+  }
+
+  Future<void> _pickDate(int index) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _formData[index]['date'] ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _formData[index]['date'] = picked;
+      });
+    }
+  }
+
+  Future<void> _pickTime(int index) async {
+    TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _formData[index]['time'] ?? TimeOfDay.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _formData[index]['time'] = picked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +150,7 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
           children: [
             if (widget.formTitle == "Requesting for Service") ...[
               const Text(
-                "Requesting for:",
+                "Request",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
@@ -130,30 +189,36 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                 },
               ),
               const SizedBox(height: 16),
-
-              DropdownButton<String>(
-                value: _selectedTrade,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedTrade = newValue!;
-                  });
-                },
-                hint: const Text('Choose for profession:'),
-                items:
-                    _trades.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
+              const Text(
+                "Requesting for:",
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
+              // const SizedBox(height: 16),
+
+              // DropdownButton<String>(
+              //   value: _selectedTrade,
+              //   onChanged: (String? newValue) {
+              //     setState(() {
+              //       _selectedTrade = newValue!;
+              //     });
+              //   },
+              //   hint: const Text('Choose for profession:'),
+              //   items:
+              //       _trades.map<DropdownMenuItem<String>>((String value) {
+              //         return DropdownMenuItem<String>(
+              //           value: value,
+              //           child: Text(value),
+              //         );
+              //       }).toList(),
+              // ),
+              // const SizedBox(height: 8),
               Autocomplete<String>(
                 optionsBuilder: (TextEditingValue textEditingValue) {
                   if (textEditingValue.text.isEmpty) {
                     return const Iterable<String>.empty();
                   }
-                  return _roles.where((String option) {
+                  return _trades.where((String option) {
                     return option.toLowerCase().contains(
                       textEditingValue.text.toLowerCase(),
                     );
@@ -174,7 +239,7 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
                     controller: fieldTextEditingController,
                     focusNode: fieldFocusNode,
                     decoration: InputDecoration(
-                      hintText: 'Search or enter manually',
+                      hintText: 'Search for profession/trade or enter manually',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -223,67 +288,290 @@ class _FormDetailScreenState extends State<FormDetailScreen> {
               Row(
                 children: [
                   Text("Number of"),
-                  SizedBox(width: 8),
-                  DropdownButton<String>(
-                    value: _selectedadult,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        _selectedadult = newValue!;
-                      });
-                    },
-                    hint: const Text('Choose from options e.g: adults'),
-                    items:
-                        _adultChoose.map<DropdownMenuItem<String>>((
-                          String value,
-                        ) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                  SizedBox(width: 2),
+                  SizedBox(
+                    width: 140,
+                    child: Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        }
+                        return _adultChoose.where((String option) {
+                          return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
                           );
-                        }).toList(),
+                        });
+                      },
+                      onSelected: (String selection) {
+                        setState(() {
+                          _roleSpecialityController.text = selection;
+                        });
+                      },
+                      fieldViewBuilder: (
+                        BuildContext context,
+                        TextEditingController fieldTextEditingController,
+                        FocusNode fieldFocusNode,
+                        VoidCallback onFieldSubmitted,
+                      ) {
+                        return TextField(
+                          controller: fieldTextEditingController,
+                          focusNode: fieldFocusNode,
+                          decoration: InputDecoration(
+                            hintText: 'Choose from options',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  SizedBox(
+                    width: 140,
+                    child: Autocomplete<String>(
+                      optionsBuilder: (TextEditingValue textEditingValue) {
+                        if (textEditingValue.text.isEmpty) {
+                          return const Iterable<String>.empty();
+                        }
+                        return _toAttend.where((String option) {
+                          return option.toLowerCase().contains(
+                            textEditingValue.text.toLowerCase(),
+                          );
+                        });
+                      },
+                      onSelected: (String selection) {
+                        setState(() {
+                          _roleSpecialityController.text = selection;
+                        });
+                      },
+                      fieldViewBuilder: (
+                        BuildContext context,
+                        TextEditingController fieldTextEditingController,
+                        FocusNode fieldFocusNode,
+                        VoidCallback onFieldSubmitted,
+                      ) {
+                        return TextField(
+                          controller: fieldTextEditingController,
+                          focusNode: fieldFocusNode,
+                          decoration: InputDecoration(
+                            hintText: 'Choose to attend',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  // DropdownButton<String>(
+                  //   value: _selectedadult,
+                  //   onChanged: (String? newValue) {
+                  //     setState(() {
+                  //       _selectedadult = newValue!;
+                  //     });
+                  //   },
+                  //   hint: const Text('Choose from options e.g: adults'),
+                  //   items:
+                  //       _adultChoose.map<DropdownMenuItem<String>>((
+                  //         String value,
+                  //       ) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value),
+                  //         );
+                  //       }).toList(),
+                  // ),
                 ],
               ),
 
-              InputTextField(hintText: "Enter manually the task or service"),
+              InputTextField(hintText: "Enter number"),
 
               const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Races"),
+              InputTextField(hintText: "Enter the Race(s) ( optional )"),
 
               const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Gender"),
+              InputTextField(hintText: "Enter the Gender(s)  ( optional )"),
 
               const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Ages"),
+              InputTextField(hintText: "Enter the Age(s)  ( optional )"),
 
               const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Species"),
+              InputTextField(hintText: "Enter the Species  ( optional )"),
 
               const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Breed"),
+              InputTextField(hintText: "Enter the Breed(s)  ( optional )"),
             ] else if (widget.formTitle == "Date and Time") ...[
-              InputTextField(hintText: "Enter the Service"),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    InputTextField(hintText: "Enter the Service"),
 
-              const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-              InputTextField(hintText: "Enter the Date "),
+                    ..._formData.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Date Picker
+                              TextFormField(
+                                readOnly: true,
+                                controller: TextEditingController(
+                                  text:
+                                      _formData[index]['date'] != null
+                                          ? '${_formData[index]['date']!.day}/${_formData[index]['date']!.month}/${_formData[index]['date']!.year}'
+                                          : '',
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: 'Date',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.calendar_today),
+                                    onPressed: () => _pickDate(index),
+                                  ),
+                                ),
+                                onTap: () => _pickDate(index),
+                              ),
 
-              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
 
-              InputTextField(hintText: "Enter the Time"),
+                              // Time Picker
+                              TextFormField(
+                                readOnly: true,
+                                controller: TextEditingController(
+                                  text:
+                                      _formData[index]['time'] != null
+                                          ? _formData[index]['time']!.format(
+                                            context,
+                                          )
+                                          : '',
+                                ),
+                                decoration: InputDecoration(
+                                  labelText: 'Time',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: const Icon(Icons.access_time),
+                                    onPressed: () => _pickTime(index),
+                                  ),
+                                ),
+                                onTap: () => _pickTime(index),
+                              ),
 
-              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
 
-              InputTextField(hintText: "Contact me let's discuss on date "),
+                              // Dropdown
+                              Autocomplete<String>(
+                                optionsBuilder: (
+                                  TextEditingValue textEditingValue,
+                                ) {
+                                  if (textEditingValue.text.isEmpty) {
+                                    return const Iterable<String>.empty();
+                                  }
+                                  return _toContact.where((String option) {
+                                    return option.toLowerCase().contains(
+                                      textEditingValue.text.toLowerCase(),
+                                    );
+                                  });
+                                },
+                                onSelected: (String selection) {
+                                  setState(() {
+                                    _roleSpecialityController.text = selection;
+                                  });
+                                },
+                                fieldViewBuilder: (
+                                  BuildContext context,
+                                  TextEditingController
+                                  fieldTextEditingController,
+                                  FocusNode fieldFocusNode,
+                                  VoidCallback onFieldSubmitted,
+                                ) {
+                                  return TextField(
+                                    controller: fieldTextEditingController,
+                                    focusNode: fieldFocusNode,
+                                    decoration: InputDecoration(
+                                      hintText:
+                                          "Contact me let's discuss on date",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
 
-              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
 
-              InputTextField(hintText: "Contact me let's discuss on time'"),
+                              // Remove Button
+                              if (_formData.length > 1)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: () => _removeSet(index),
+                                      iconSize: 32,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      'Delete',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
+
+                    // Add Button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.add_circle,
+                            color: Colors.green,
+                          ),
+                          onPressed: _addNewSet,
+                          iconSize: 32,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Add More',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
 
               const SizedBox(height: 16),
             ] else if (widget.formTitle == "Wages and Charges") ...[
