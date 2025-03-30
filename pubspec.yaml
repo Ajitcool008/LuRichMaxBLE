@@ -40,6 +40,10 @@ dependencies:
   flutter_otp_text_field: ^1.1.0+2
   responsive_navigation_bar: ^5.0.2
   carousel_slider: ^5.0.0
+  intl: ^0.20.2
+  timeago: ^3.2.2
+  table_calendar: ^3.2.0
+  flutter_svg: ^2.0.17
 
 dev_dependencies:
   flutter_test:

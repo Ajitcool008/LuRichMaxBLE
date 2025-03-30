@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/input_text_field.dart';
+import 'package:lurichmaxble/src/modules/create_request/controllers/form_controller.dart';
+import 'package:lurichmaxble/src/utils/date_selector.dart';
 
 class FormsListScreen extends StatefulWidget {
   const FormsListScreen({super.key});
@@ -105,6 +107,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
   @override
   void initState() {
     super.initState();
+    Get.put(CreateFormsController());
     // Add initial form data for date & time section
     _addNewSet();
   }
@@ -483,144 +486,44 @@ class _FormsListScreenState extends State<FormsListScreen> {
             InputTextField(hintText: "Enter the Service"),
             const SizedBox(height: 16),
 
-            ..._formData.asMap().entries.map((entry) {
-              int idx = entry.key;
-              return Card(
-                margin: const EdgeInsets.only(bottom: 12),
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Date Picker
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text:
-                              _formData[idx]['date'] != null
-                                  ? '${_formData[idx]['date']!.day}/${_formData[idx]['date']!.month}/${_formData[idx]['date']!.year}'
-                                  : '',
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'Date',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.calendar_today),
-                            onPressed: () => _pickDate(idx),
-                          ),
-                        ),
-                        onTap: () => _pickDate(idx),
-                      ),
+            CreateEventSecondPage(
+              con: Get.find<CreateFormsController>(),
+              kToday: Get.find<CreateFormsController>().kToday,
+            ),
+            const SizedBox(height: 12),
 
-                      const SizedBox(height: 12),
-
-                      // Time Picker
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text:
-                              _formData[idx]['time'] != null
-                                  ? _formData[idx]['time']!.format(context)
-                                  : '',
-                        ),
-                        decoration: InputDecoration(
-                          labelText: 'Time',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.access_time),
-                            onPressed: () => _pickTime(idx),
-                          ),
-                        ),
-                        onTap: () => _pickTime(idx),
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Contact options
-                      Autocomplete<String>(
-                        optionsBuilder: (TextEditingValue textEditingValue) {
-                          if (textEditingValue.text.isEmpty) {
-                            return const Iterable<String>.empty();
-                          }
-                          return _toContact.where((String option) {
-                            return option.toLowerCase().contains(
-                              textEditingValue.text.toLowerCase(),
-                            );
-                          });
-                        },
-                        onSelected: (String selection) {
-                          // Handle selection
-                        },
-                        fieldViewBuilder: (
-                          BuildContext context,
-                          TextEditingController fieldTextEditingController,
-                          FocusNode fieldFocusNode,
-                          VoidCallback onFieldSubmitted,
-                        ) {
-                          return TextField(
-                            controller: fieldTextEditingController,
-                            focusNode: fieldFocusNode,
-                            decoration: InputDecoration(
-                              hintText: "Contact me let's discuss on date",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      // Remove Button
-                      if (_formData.length > 1)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _removeSet(idx),
-                              iconSize: 32,
-                            ),
-                            const SizedBox(width: 8),
-                            const Text(
-                              'Delete',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
+            // Contact options
+            Autocomplete<String>(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text.isEmpty) {
+                  return const Iterable<String>.empty();
+                }
+                return _toContact.where((String option) {
+                  return option.toLowerCase().contains(
+                    textEditingValue.text.toLowerCase(),
+                  );
+                });
+              },
+              onSelected: (String selection) {
+                // Handle selection
+              },
+              fieldViewBuilder: (
+                BuildContext context,
+                TextEditingController fieldTextEditingController,
+                FocusNode fieldFocusNode,
+                VoidCallback onFieldSubmitted,
+              ) {
+                return TextField(
+                  controller: fieldTextEditingController,
+                  focusNode: fieldFocusNode,
+                  decoration: InputDecoration(
+                    hintText: "Contact me let's discuss on date",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-
-            // Add More Button
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: Colors.green),
-                  onPressed: _addNewSet,
-                  iconSize: 32,
-                ),
-                const SizedBox(width: 8),
-                const Text(
-                  'Add More',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
+                );
+              },
             ),
           ],
         );
