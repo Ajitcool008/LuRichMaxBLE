@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 
 class ProfessionalsProfileScreen extends StatelessWidget {
@@ -12,6 +13,20 @@ class ProfessionalsProfileScreen extends StatelessWidget {
         backgroundColor: AppColors.appColor,
         leading: const Icon(Icons.arrow_back, color: Colors.white),
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
+      ),
+      floatingActionButton: Container(
+        color: Colors.transparent,
+        width: Get.width * 0.5, // Take complete width of the screen
+        padding: const EdgeInsets.symmetric(horizontal: 20), // Optional padding
+        child: FloatingActionButton(
+          heroTag: "draft event",
+          onPressed: () async {},
+          backgroundColor: AppColors.appColor, // Yellow background color
+          child: Text(
+            "Book Now",
+            style: const TextStyle(fontSize: 20, color: Colors.white),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -29,50 +44,62 @@ class ProfessionalsProfileScreen extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text('Jackson Una',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18)),
-                      Text('Plumber, Electrician',
-                          style: TextStyle(color: Colors.grey)
+                      Text(
+                        'Jackson Una',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Text(
+                        'Plumber, Electrician',
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              const Text('Available for',
-                  style: TextStyle(color: Colors.grey)),
-              const Text('Onsite Task',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 20),
-              const Text('About',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text('Available for', style: TextStyle(color: Colors.grey)),
               const Text(
-                  'An electrician is a tradesperson specializing in electrical wiring of buildings, transmission lines, stationary machines, and related equipment. Electricians may be employed in the installation of new electrical components or the maintenance.'),
+                'Onsite Task',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                'About',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              const Text(
+                'An electrician is a tradesperson specializing in electrical wiring of buildings, transmission lines, stationary machines, and related equipment. Electricians may be employed in the installation of new electrical components or the maintenance.',
+              ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
-                  Text('Gallery',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16)),
-                  Text('View all',
-                      style: TextStyle(color: Colors.blue, fontSize: 14)),
+                  Text(
+                    'Gallery',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  Text(
+                    'View all',
+                    style: TextStyle(color: Colors.blue, fontSize: 14),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
               CarouselSlider(
-                items: [
-                  'assets/images/image (1).png',
-                  'assets/images/image (1).png',
-                  'assets/images/image (1).png'
-                ].map((imgPath) {
-                  return ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(imgPath, fit: BoxFit.cover),
-                  );
-                }).toList(),
+                items:
+                    [
+                      'assets/images/image (1).png',
+                      'assets/images/image (1).png',
+                      'assets/images/image (1).png',
+                    ].map((imgPath) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(imgPath, fit: BoxFit.cover),
+                      );
+                    }).toList(),
                 options: CarouselOptions(
                   height: 100,
                   enableInfiniteScroll: false,
@@ -80,9 +107,10 @@ class ProfessionalsProfileScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Reviews & Rating',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text(
+                'Reviews & Rating',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const SizedBox(height: 10),
               ...List.generate(3, (index) => const ReviewTile()),
             ],
@@ -112,15 +140,17 @@ class ReviewTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Vivek Kumar',
-                      style:
-                      TextStyle(fontWeight: FontWeight.bold)),
+                  const Text(
+                    'Vivek Kumar',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   const Icon(Icons.star, color: Colors.orange, size: 16),
                   const Text(
-                      'Looking for Best Electrician Near you? Get lowest prices for electrician services in Delhi.'),
+                    'Looking for Best Electrician Near you? Get lowest prices for electrician services in Delhi.',
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
