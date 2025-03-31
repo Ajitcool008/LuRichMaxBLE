@@ -40,7 +40,7 @@ class CreateFormsController extends GetxController {
 
   List<DateTime> selectedDates = [];
 
-  RxBool specifyEachDay = false.obs;
+  RxBool specifyEachDay = true.obs;
 
   final kToday = DateTime.now();
 

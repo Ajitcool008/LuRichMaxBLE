@@ -476,10 +476,12 @@ class _FormsListScreenState extends State<FormsListScreen> {
             InputTextField(hintText: "Enter the Species (optional)"),
             const SizedBox(height: 16),
             InputTextField(hintText: "Enter the Breed(s) (optional)"),
+            const SizedBox(height: 16),
+            InputTextField(hintText: "Enter additional info (optional)"),
           ],
         );
 
-      case 2: // Date and Time
+      case 4: // Date and Time
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -491,7 +493,10 @@ class _FormsListScreenState extends State<FormsListScreen> {
               kToday: Get.find<CreateFormsController>().kToday,
             ),
             const SizedBox(height: 12),
-
+            Center(
+              child: Text("OR", style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 12),
             // Contact options
             Autocomplete<String>(
               optionsBuilder: (TextEditingValue textEditingValue) {
@@ -540,7 +545,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
           ],
         );
 
-      case 4: // Work Services
+      case 5: // Work Services
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

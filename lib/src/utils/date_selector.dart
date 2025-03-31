@@ -40,61 +40,61 @@ class CreateEventSecondPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Row(
-                  children: [
-                    const Text("Select a Date Range: "),
-                    Switch(
-                      activeColor: const Color(0xff03B4BF),
-                      value:
-                          con.rangeSelectionMode ==
-                          RangeSelectionMode.toggledOn,
-                      onChanged: (value) async {
-                        if (con.selectedDays.isNotEmpty ||
-                            con.dateScheduleList.isNotEmpty) {
-                          /// Executes the `showDialog` method, responsible for performing a specific task.
-                          bool confirmDelete = await showDialog(
-                            context: context,
-                            builder:
-                                (context) => CustomScheduleDialog(
-                                  header:
-                                      value
-                                          ? "If you use Select a Date Range it will remove all exisitng Date/Times. Do you wish to proceed?"
-                                          : "If you turn Select a Date Range off, it will remove all exisitng Date/Times. Do you wish to proceed?",
-                                  subHeader: "",
-                                ),
-                          );
-                          if (confirmDelete) {
-                            if (!value) {
-                              con.rangeSelectionMode =
-                                  RangeSelectionMode.toggledOff;
-                            } else {
-                              con.rangeSelectionMode =
-                                  RangeSelectionMode.toggledOn;
-                            }
-                            con.selectedDays.clear();
-                            con.dateScheduleList.clear();
-                            con.rangeStart = null; // Important to clean those
-                            con.rangeEnd = null;
-                            con.isRefresh.value = !con.isRefresh.value;
-                          }
-                        } else {
-                          if (!value) {
-                            con.rangeSelectionMode =
-                                RangeSelectionMode.toggledOff;
-                          } else {
-                            con.rangeSelectionMode =
-                                RangeSelectionMode.toggledOn;
-                          }
-                          con.selectedDays.clear();
-                          con.dateScheduleList.clear();
-                          con.rangeStart = null; // Important to clean those
-                          con.rangeEnd = null;
-                          con.isRefresh.value = !con.isRefresh.value;
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     const Text("Select a Date Range: "),
+                //     Switch(
+                //       activeColor: const Color(0xff03B4BF),
+                //       value:
+                //           con.rangeSelectionMode ==
+                //           RangeSelectionMode.toggledOn,
+                //       onChanged: (value) async {
+                //         if (con.selectedDays.isNotEmpty ||
+                //             con.dateScheduleList.isNotEmpty) {
+                //           /// Executes the `showDialog` method, responsible for performing a specific task.
+                //           bool confirmDelete = await showDialog(
+                //             context: context,
+                //             builder:
+                //                 (context) => CustomScheduleDialog(
+                //                   header:
+                //                       value
+                //                           ? "If you use Select a Date Range it will remove all exisitng Date/Times. Do you wish to proceed?"
+                //                           : "If you turn Select a Date Range off, it will remove all exisitng Date/Times. Do you wish to proceed?",
+                //                   subHeader: "",
+                //                 ),
+                //           );
+                //           if (confirmDelete) {
+                //             if (!value) {
+                //               con.rangeSelectionMode =
+                //                   RangeSelectionMode.toggledOff;
+                //             } else {
+                //               con.rangeSelectionMode =
+                //                   RangeSelectionMode.toggledOn;
+                //             }
+                //             con.selectedDays.clear();
+                //             con.dateScheduleList.clear();
+                //             con.rangeStart = null; // Important to clean those
+                //             con.rangeEnd = null;
+                //             con.isRefresh.value = !con.isRefresh.value;
+                //           }
+                //         } else {
+                //           if (!value) {
+                //             con.rangeSelectionMode =
+                //                 RangeSelectionMode.toggledOff;
+                //           } else {
+                //             con.rangeSelectionMode =
+                //                 RangeSelectionMode.toggledOn;
+                //           }
+                //           con.selectedDays.clear();
+                //           con.dateScheduleList.clear();
+                //           con.rangeStart = null; // Important to clean those
+                //           con.rangeEnd = null;
+                //           con.isRefresh.value = !con.isRefresh.value;
+                //         }
+                //       },
+                //     ),
+                //   ],
+                // ),
               ],
             ),
             Stack(
@@ -171,11 +171,11 @@ class CreateEventSecondPage extends StatelessWidget {
                 ),
                 Positioned(
                   top: Get.height * 0.02,
-                  right: Get.width * 0.15,
+                  right: Get.width * 0.16,
                   child: Container(
                     height: 40,
                     width: 80,
-                    color: ThemeHelper.primary,
+                    color: Colors.grey.shade200,
                   ),
                 ),
               ],
@@ -192,36 +192,36 @@ class CreateEventSecondPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Row(
-                  children: [
-                    const Text("Set Times for Each Date: "),
-                    Switch(
-                      activeColor: const Color(0xff03B4BF),
-                      value: con.specifyEachDay.value,
-                      onChanged: (value) async {
-                        if (con.specifyEachDay.value) {
-                          bool confirmDelete = await showDialog(
-                            context: context,
-                            builder:
-                                (context) => CustomScheduleDialog(
-                                  header:
-                                      "If you turn Set Times for Each Date off, you will lose any times previously set. Do you wish to continue?",
-                                  subHeader: "",
-                                ),
-                          );
-                          if (confirmDelete) {
-                            con.specifyEachDay.value =
-                                !con.specifyEachDay.value;
-                            con.resetIntervals();
-                          }
-                        } else {
-                          con.specifyEachDay.value = !con.specifyEachDay.value;
-                          con.resetIntervals();
-                        }
-                      },
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     const Text("Set Times for Each Date: "),
+                //     Switch(
+                //       activeColor: const Color(0xff03B4BF),
+                //       value: con.specifyEachDay.value,
+                //       onChanged: (value) async {
+                //         if (con.specifyEachDay.value) {
+                //           bool confirmDelete = await showDialog(
+                //             context: context,
+                //             builder:
+                //                 (context) => CustomScheduleDialog(
+                //                   header:
+                //                       "If you turn Set Times for Each Date off, you will lose any times previously set. Do you wish to continue?",
+                //                   subHeader: "",
+                //                 ),
+                //           );
+                //           if (confirmDelete) {
+                //             con.specifyEachDay.value =
+                //                 !con.specifyEachDay.value;
+                //             con.resetIntervals();
+                //           }
+                //         } else {
+                //           con.specifyEachDay.value = !con.specifyEachDay.value;
+                //           con.resetIntervals();
+                //         }
+                //       },
+                //     ),
+                //   ],
+                // ),
               ],
             ),
             if (con.dateScheduleList.isNotEmpty) ...{
@@ -285,7 +285,7 @@ class TimeSelectionInterval extends StatelessWidget {
                                   // change the border color
                                   primary: Colors.blue,
                                   // change the text color
-                                  onSurface: Colors.black,
+                                  // onSurface: Colors.black,
                                 ),
                                 // button colors
                                 buttonTheme: const ButtonThemeData(
@@ -336,9 +336,9 @@ class TimeSelectionInterval extends StatelessWidget {
                         }
                       },
                       style: ButtonStyle(
-                        backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.black,
-                        ), // Button background color
+                        // backgroundColor: WidgetStateProperty.all<Color>(
+                        //   Colors.black,
+                        // ), // Button background color
                         shape: WidgetStateProperty.all<OutlinedBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(
@@ -387,7 +387,7 @@ class TimeSelectionInterval extends StatelessWidget {
                                   // change the border color
                                   primary: Colors.blue,
                                   // change the text color
-                                  onSurface: Colors.black,
+                                  // onSurface: Colors.black,
                                 ),
                                 // button colors
                                 buttonTheme: const ButtonThemeData(
@@ -637,6 +637,17 @@ class DateTimeSelectionInterval extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 35),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      labelText: "Service",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
                 ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
@@ -675,7 +686,7 @@ class DateTimeSelectionInterval extends StatelessWidget {
                                         // change the border color
                                         primary: Colors.blue,
                                         // change the text color
-                                        onSurface: Colors.black,
+                                        // onSurface: Colors.black,
                                       ),
                                       // button colors
                                       buttonTheme: const ButtonThemeData(
@@ -745,7 +756,7 @@ class DateTimeSelectionInterval extends StatelessWidget {
                             },
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all<Color>(
-                                Colors.black,
+                                Colors.white,
                               ), // Button background color
                               shape:
                               /// Executes the `WidgetStateProperty.all<OutlinedBorder>` method, responsible for performing a specific task.
@@ -880,7 +891,7 @@ class DateTimeSelectionInterval extends StatelessWidget {
                             },
                             style: ButtonStyle(
                               backgroundColor: WidgetStateProperty.all<Color>(
-                                Colors.black,
+                                Colors.white,
                               ), // Button background color
                               shape: WidgetStateProperty.all<OutlinedBorder>(
                                 RoundedRectangleBorder(
@@ -934,9 +945,9 @@ class DateTimeSelectionInterval extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color(0xff012426),
-                      ),
+                      // backgroundColor: MaterialStateProperty.all<Color>(
+                      //   const Color(0xff012426),
+                      // ),
                       shape: MaterialStateProperty.all<OutlinedBorder>(
                         const RoundedRectangleBorder(
                           borderRadius:
