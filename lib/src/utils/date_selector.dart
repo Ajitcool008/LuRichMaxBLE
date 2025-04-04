@@ -184,14 +184,6 @@ class CreateEventSecondPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "Times",
-                  style: TextStyle(
-                    // color: Color(0xff020200),
-                    fontSize: 18,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
                 // Row(
                 //   children: [
                 //     const Text("Set Times for Each Date: "),
@@ -263,6 +255,14 @@ class TimeSelectionInterval extends StatelessWidget {
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  const Text(
+                    "Times",
+                    style: TextStyle(
+                      // color: Color(0xff020200),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
                   Expanded(
                     child: TextButton(
                       onPressed: () async {
@@ -628,8 +628,7 @@ class DateTimeSelectionInterval extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                Center(
                   child: Text(
                     DateTimeHelper.changeStringDateFormat(
                       con.dateScheduleList[position].date,
@@ -644,6 +643,16 @@ class DateTimeSelectionInterval extends StatelessWidget {
                     decoration: const InputDecoration(
                       labelText: "Service",
                       border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: const Text(
+                    "Time",
+                    style: TextStyle(
+                      // color: Color(0xff020200),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
