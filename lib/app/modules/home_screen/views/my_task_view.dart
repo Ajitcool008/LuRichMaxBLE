@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
-import 'package:lurichmaxble/app/modules/authention/widgets/input_text_field.dart';
+import 'package:lurichmaxble/app/global_widgets/common_text_field.dart';
 
 class MyTask extends StatelessWidget {
   const MyTask({super.key});

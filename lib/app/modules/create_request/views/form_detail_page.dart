@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/app/modules/authention/widgets/input_text_field.dart';
+import 'package:lurichmaxble/app/global_widgets/common_text_field.dart';
 
 class FormDetailScreen extends StatefulWidget {
   final String formTitle;

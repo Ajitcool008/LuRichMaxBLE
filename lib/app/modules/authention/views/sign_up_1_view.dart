@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
+import 'package:lurichmaxble/app/modules/authention/views/sign_up_2_view.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
 import 'package:lurichmaxble/app/global_widgets/top_image_login.dart';
@@ -136,11 +138,9 @@ class _SignUp1ViewState extends State<SignUp1View> {
             child: CommonButton(
               buttonTextColor: Colors.white,
               buttonColor: AppColors.appColor,
-              buttonText: "SIGN IN",
+              buttonText: "SIGN UP",
               onTap: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => LoginView()));
+                Get.to(SignUp2View());
               },
               buttonWidth: width * 0.91,
             ),

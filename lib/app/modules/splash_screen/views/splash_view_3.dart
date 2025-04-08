@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
-import 'package:lurichmaxble/app/modules/authention/views/sign_up_1_view.dart';
 
 import 'splash_view_4.dart';
 
