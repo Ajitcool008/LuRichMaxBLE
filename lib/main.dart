@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/components/app_colors.dart';
-import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view.dart';
+import 'package:lurichmaxble/core/constants/app_colors.dart';
+import 'package:lurichmaxble/app/modules/splash_screen/views/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
