@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
+import 'package:lurichmaxble/components/common_autocomplete_testfield.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/input_text_field.dart';
 import 'package:lurichmaxble/src/modules/create_request/controllers/form_controller.dart';
@@ -152,6 +153,8 @@ class _FormsListScreenState extends State<FormsListScreen> {
 
   String? _selectedExperienceType;
   String? _selectedBookingOption; // Added definition for _selectedBookingOption
+  String?
+  _selectedsixBookingOption; // Added definition for _selectedBookingOption
   String? _selectedSalaryOption; // Added definition for _selectedSalaryOption
   String? _selectedPerOption; // Added definition for _selectedPerOption
   final List<String> _experienceTypes = [
@@ -408,6 +411,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
               },
             ),
           ),
+          const SizedBox(height: 50), // Add space after the last item
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -439,23 +443,13 @@ class _FormsListScreenState extends State<FormsListScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        DropdownButtonFormField<String>(
-          value: _selectedGender,
-          decoration: InputDecoration(
-            hintText: 'Select gender',
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-          isExpanded: true,
-          items:
-              _genders.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-          onChanged: (String? newValue) {
+        CustomAutocompleteTextField(
+          options: _genders,
+          controller: _genderController,
+          hintText: 'Select gender or enter manually',
+          onSelected: (String selected) {
             setState(() {
-              _selectedGender = newValue;
+              _genderController.text = selected;
             });
           },
         ),
@@ -650,40 +644,17 @@ class _FormsListScreenState extends State<FormsListScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 8),
-        Autocomplete<String>(
-          optionsBuilder: (TextEditingValue textEditingValue) {
-            if (textEditingValue.text.isEmpty) {
-              return const Iterable<String>.empty();
-            }
-            return _languages.where((String option) {
-              return option.toLowerCase().contains(
-                textEditingValue.text.toLowerCase(),
-              );
-            });
-          },
-          onSelected: (String selection) {
+        CustomAutocompleteTextField(
+          options: _languages,
+          controller: _languageController,
+          hintText: 'Select language or enter manually',
+          onSelected: (String selected) {
             setState(() {
-              _languageController.text = selection;
+              _languageController.text = selected;
             });
-          },
-          fieldViewBuilder: (
-            BuildContext context,
-            TextEditingController fieldTextEditingController,
-            FocusNode fieldFocusNode,
-            VoidCallback onFieldSubmitted,
-          ) {
-            return TextField(
-              controller: fieldTextEditingController,
-              focusNode: fieldFocusNode,
-              decoration: InputDecoration(
-                hintText: 'Select language or enter manually',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            );
           },
         ),
+
         const SizedBox(height: 16),
       ],
     );
@@ -727,40 +698,14 @@ class _FormsListScreenState extends State<FormsListScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return const Iterable<String>.empty();
-                }
-                return _services.where((String option) {
-                  return option.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  );
-                });
-              },
-              onSelected: (String selection) {
+            CustomAutocompleteTextField(
+              options: _services,
+              controller: _requestingForController,
+              hintText: 'Search or enter manually',
+              onSelected: (selected) {
                 setState(() {
-                  _requestingForController.text = selection;
+                  _requestingForController.text = selected;
                 });
-              },
-              fieldViewBuilder: (
-                BuildContext context,
-                TextEditingController fieldTextEditingController,
-                FocusNode fieldFocusNode,
-                VoidCallback onFieldSubmitted,
-              ) {
-                return TextField(
-                  controller: fieldTextEditingController,
-                  focusNode: fieldFocusNode,
-                  decoration: InputDecoration(
-                    hintText: 'Search or enter manually',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    suffixText: "| Request",
-                    suffixStyle: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                );
               },
             ),
             const SizedBox(height: 16),
@@ -796,43 +741,53 @@ class _FormsListScreenState extends State<FormsListScreen> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
-
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return const Iterable<String>.empty();
-                }
-                return professions.where((String option) {
-                  return option.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  );
-                });
-              },
-              onSelected: (String selection) {
-                setState(() {
-                  _tradeProfessionController.text = selection;
-                });
-              },
-              fieldViewBuilder: (
-                BuildContext context,
-                TextEditingController fieldTextEditingController,
-                FocusNode fieldFocusNode,
-                VoidCallback onFieldSubmitted,
-              ) {
-                return TextField(
-                  controller: fieldTextEditingController,
-                  focusNode: fieldFocusNode,
-                  decoration: InputDecoration(
+            Row(
+              children: [
+                Expanded(
+                  flex: 6, // 70% width
+                  child: CustomAutocompleteTextField(
+                    options: professions,
+                    controller: _tradeProfessionController,
                     hintText:
                         'Search service(s) or enter manually profession(s)/trade(s)',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    suffixText: "| to hire",
-                    suffixStyle: TextStyle(fontWeight: FontWeight.bold),
+                    onSelected: (String selected) {
+                      setState(() {
+                        _tradeProfessionController.text = selected;
+                      });
+                    },
                   ),
-                );
-              },
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 4, // 30% width
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedBookingOption,
+                    decoration: InputDecoration(
+                      hintText: 'Select to hire/book',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    isExpanded: true,
+                    items:
+                        [
+                          'To Hire',
+                          'To Book',
+                          "Launge",
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedBookingOption = newValue;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
 
@@ -842,49 +797,43 @@ class _FormsListScreenState extends State<FormsListScreen> {
             const SizedBox(height: 8),
             _buildExperienceQualificationRow(),
             _buildServiceTaskRow(),
-
-            // DropdownButton<String>(
-            //   value: _selectedItemName,
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       _selectedItemName = newValue!;
-            //     });
-            //   },
-            //   hint: const Text('Choose e.g: item(s) or Advert(s)'),
-            //   isExpanded: true,
-            //   items:
-            //       _itemsNames.map<DropdownMenuItem<String>>((String value) {
-            //         return DropdownMenuItem<String>(
-            //           value: value,
-            //           child: Text(value),
-            //         );
-            //       }).toList(),
-            // ),
-            // const SizedBox(height: 8),
-            // InputTextField(hintText: "Enter Item Name e.g: truck or advert"),
           ],
         );
       case 1: // Choose a Task
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // DropdownButton<String>(
-            //   value: _selectedTask,
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       _selectedTask = newValue!;
-            //     });
-            //   },
-            //   isExpanded: true,
-            //   hint: const Text('Choose e.g: Task(s) or Service(s)'),
-            //   items:
-            //       _tasksChoose.map<DropdownMenuItem<String>>((String value) {
-            //         return DropdownMenuItem<String>(
-            //           value: value,
-            //           child: Text(value),
-            //         );
-            //       }).toList(),
-            // ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Note:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ), // Spacing between "Note:" and the content
+                  Expanded(
+                    child: const Text(
+                      "Enter genders for services that require knowing the client’s or service provider’s gender (e.g., massage services).\n\n"
+                      "Enter ages for services that require knowing your age for service charges (e.g., charges for kids’ barbering).\n\n"
+                      "Enter races for services that require knowing the client’s or service provider’s race for good service delivery (e.g., hair and other beauty services).\n\n"
+                      "Enter breeds for animal services.\n\n"
+                      "Enter species for animal services.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 8),
             InputTextField(hintText: "Enter manually the task or service"),
             const SizedBox(height: 16),
@@ -894,71 +843,23 @@ class _FormsListScreenState extends State<FormsListScreen> {
                 const Text("Number of"),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Autocomplete<String>(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      }
-                      return _adultChoose.where((String option) {
-                        return option.toLowerCase().contains(
-                          textEditingValue.text.toLowerCase(),
-                        );
-                      });
-                    },
-                    onSelected: (String selection) {
+                  child: CustomAutocompleteTextField(
+                    options: _adultChoose,
+                    controller: TextEditingController(),
+                    hintText: 'Persons',
+                    onSelected: (String selected) {
                       // Handle selection
-                    },
-                    fieldViewBuilder: (
-                      BuildContext context,
-                      TextEditingController fieldTextEditingController,
-                      FocusNode fieldFocusNode,
-                      VoidCallback onFieldSubmitted,
-                    ) {
-                      return TextField(
-                        controller: fieldTextEditingController,
-                        focusNode: fieldFocusNode,
-                        decoration: InputDecoration(
-                          hintText: 'Persons',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      );
                     },
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: Autocomplete<String>(
-                    optionsBuilder: (TextEditingValue textEditingValue) {
-                      if (textEditingValue.text.isEmpty) {
-                        return const Iterable<String>.empty();
-                      }
-                      return _toAttend.where((String option) {
-                        return option.toLowerCase().contains(
-                          textEditingValue.text.toLowerCase(),
-                        );
-                      });
-                    },
-                    onSelected: (String selection) {
+                  child: CustomAutocompleteTextField(
+                    options: _toAttend,
+                    controller: TextEditingController(),
+                    hintText: 'to attend to',
+                    onSelected: (String selected) {
                       // Handle selection
-                    },
-                    fieldViewBuilder: (
-                      BuildContext context,
-                      TextEditingController fieldTextEditingController,
-                      FocusNode fieldFocusNode,
-                      VoidCallback onFieldSubmitted,
-                    ) {
-                      return TextField(
-                        controller: fieldTextEditingController,
-                        focusNode: fieldFocusNode,
-                        decoration: InputDecoration(
-                          hintText: 'to attend to',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      );
                     },
                   ),
                 ),
@@ -1009,30 +910,15 @@ class _FormsListScreenState extends State<FormsListScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButtonFormField<String>(
-              value: _selectedThirdPortalOption,
-              decoration: InputDecoration(
-                hintText: 'Select an option',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              isExpanded:
-                  true, // Ensures the dropdown takes up the available width
-              items:
-                  _portalthirdNumber.map<DropdownMenuItem<String>>((
-                    String value,
-                  ) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-              onChanged: (String? newValue) {
+            CustomAutocompleteTextField(
+              options: _portalthirdNumber,
+              controller: _thirdPortalSelectController,
+              hintText: 'Select an option or enter manually',
+              onSelected: (String selected) {
                 setState(() {
-                  _selectedThirdPortalOption = newValue!;
-                  _thirdPortalSelectController.text =
-                      newValue; // Update the controller if needed
+                  _thirdPortalSelectController.text = selected;
+                  _selectedThirdPortalOption =
+                      selected; // Update the selected option
                 });
               },
             ),
@@ -1052,27 +938,17 @@ class _FormsListScreenState extends State<FormsListScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownButton<String>(
-              value: _selectedFourPortalOption,
-              onChanged: (String? newValue) {
+            CustomAutocompleteTextField(
+              options: _portalfourNumber,
+              controller: _fourPortalSelectController,
+              hintText: 'Select an address or area',
+              onSelected: (String selected) {
                 setState(() {
-                  _selectedFourPortalOption = newValue!;
-                  _fourPortalSelectController.text =
-                      newValue; // Update the controller if needed
+                  _fourPortalSelectController.text = selected;
+                  _selectedFourPortalOption =
+                      selected; // Update the selected option
                 });
               },
-              hint: const Text('Select an address or area'),
-              isExpanded:
-                  true, // Ensures the dropdown takes up the available width
-              items:
-                  _portalfourNumber.map<DropdownMenuItem<String>>((
-                    String value,
-                  ) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
             ),
             TextField(
               controller: _serviceDetailsController,
@@ -1101,37 +977,62 @@ class _FormsListScreenState extends State<FormsListScreen> {
               child: Text("OR", style: TextStyle(fontWeight: FontWeight.bold)),
             ),
             const SizedBox(height: 12),
-            // Contact options
-            Autocomplete<String>(
-              optionsBuilder: (TextEditingValue textEditingValue) {
-                if (textEditingValue.text.isEmpty) {
-                  return const Iterable<String>.empty();
-                }
-                return _toContact.where((String option) {
-                  return option.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  );
-                });
-              },
-              onSelected: (String selection) {
-                // Handle selection
-              },
-              fieldViewBuilder: (
-                BuildContext context,
-                TextEditingController fieldTextEditingController,
-                FocusNode fieldFocusNode,
-                VoidCallback onFieldSubmitted,
-              ) {
-                return TextField(
-                  controller: fieldTextEditingController,
-                  focusNode: fieldFocusNode,
-                  decoration: InputDecoration(
-                    hintText: "Contact me let's discuss on date",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 6, // Adjust the width ratio as needed
+                  child: CustomAutocompleteTextField(
+                    options: [
+                      'Services',
+                      'Delivery',
+                      'Booking',
+                      'Lauging',
+                      'Pickup',
+                      'Hiring',
+                    ],
+                    controller: TextEditingController(),
+                    hintText: 'Search or enter manually',
+                    onSelected: (String selected) {
+                      // Handle selection
+                    },
                   ),
-                );
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 4, // Adjust the width ratio as needed
+                  child: DropdownButtonFormField<String>(
+                    value: null,
+                    decoration: InputDecoration(
+                      hintText: 'Date, Time',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    isExpanded: true,
+                    items:
+                        ['Date', 'Time'].map<DropdownMenuItem<String>>((
+                          String value,
+                        ) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                    onChanged: (String? newValue) {
+                      // Handle selection
+                    },
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            // Contact options
+            CustomAutocompleteTextField(
+              options: _toContact,
+              controller: TextEditingController(),
+              hintText: "Contact me let's discuss on date",
+              onSelected: (String selected) {
+                // Handle selection
               },
             ),
           ],
@@ -1146,10 +1047,10 @@ class _FormsListScreenState extends State<FormsListScreen> {
               children: [
                 Expanded(
                   child: DropdownButton<String>(
-                    value: _selectedBookingOption,
+                    value: _selectedsixBookingOption,
                     onChanged: (String? newValue) {
                       setState(() {
-                        _selectedBookingOption = newValue!;
+                        _selectedsixBookingOption = newValue!;
                       });
                     },
                     hint: const Text('Select Booking/Service(s)'),
@@ -1192,7 +1093,14 @@ class _FormsListScreenState extends State<FormsListScreen> {
             const SizedBox(height: 16),
 
             // Text field for entering price
-            InputTextField(hintText: "Enter manually or enter price"),
+            CustomAutocompleteTextField(
+              options: List.generate(20, (index) => '£${(index + 1) * 5}'),
+              controller: TextEditingController(),
+              hintText: 'Enter manually or select price',
+              onSelected: (String selected) {
+                // Handle selection
+              },
+            ),
             const SizedBox(height: 16),
 
             // Second row of dropdowns
@@ -1297,24 +1205,15 @@ class _FormsListScreenState extends State<FormsListScreen> {
             const SizedBox(height: 16),
 
             // Dropdown for "Contact me to let's agree"
-            DropdownButton<String>(
-              value: _selectedContactOption,
-              onChanged: (String? newValue) {
+            CustomAutocompleteTextField(
+              options: ["Contact me to let's agree"],
+              controller: TextEditingController(),
+              hintText: "Contact me to let's agree",
+              onSelected: (String selected) {
                 setState(() {
-                  _selectedContactOption = newValue!;
+                  _selectedContactOption = selected;
                 });
               },
-              hint: const Text("Contact me to let's agree"),
-              isExpanded: true,
-              items:
-                  ["Contact me to let's agree"].map<DropdownMenuItem<String>>((
-                    String value,
-                  ) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
             ),
             const SizedBox(height: 16),
           ],
@@ -1391,7 +1290,23 @@ class _FormsListScreenState extends State<FormsListScreen> {
             const SizedBox(height: 16),
           ],
         );
-
+      case 8:
+        return Column(
+          children: [
+            CustomAutocompleteTextField(
+              options: _itemsNames,
+              controller: TextEditingController(),
+              hintText: 'Choose e.g: item(s) or Advert(s)',
+              onSelected: (String selected) {
+                setState(() {
+                  _selectedItemName = selected;
+                });
+              },
+            ),
+            const SizedBox(height: 8),
+            InputTextField(hintText: "Enter Item Name e.g: truck or advert"),
+          ],
+        );
       default:
         return const SizedBox.shrink();
     }
