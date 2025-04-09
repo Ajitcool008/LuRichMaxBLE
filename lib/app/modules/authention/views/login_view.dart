@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:lurichmaxble/app/modules/authention/views/forgot_password.dart';
 import 'package:lurichmaxble/app/modules/authention/views/sign_up_1_view.dart';
 import 'package:lurichmaxble/app/modules/authention/widgets/validation_input_text_field.dart';
@@ -7,7 +8,6 @@ import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
 import 'package:lurichmaxble/app/global_widgets/top_image_login.dart';
 import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -21,6 +21,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   bool isPasswordVisible = true;
   @override
   Widget build(BuildContext context) {
@@ -116,9 +117,8 @@ class _LoginViewState extends State<LoginView> {
                 buttonText: "SIGN IN",
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    var sharedPref = await SharedPreferences.getInstance();
-                    sharedPref.setBool("isLoggedIN", true);
-
+                    var box = GetStorage();
+                    box.write('isLoggedIN', true);
                     Get.offAll(HomePage());
                   }
                 },
