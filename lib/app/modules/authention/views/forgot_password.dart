@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/app/modules/authention/views/create_profile_view.dart';
 import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
 import 'package:lurichmaxble/app/modules/authention/widgets/validation_input_text_field.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
-import 'package:lurichmaxble/app/global_widgets/common_text_field.dart';
-
-import '../../home_screen/views/home_view.dart';
 
 final _formKey = GlobalKey<FormState>();
 

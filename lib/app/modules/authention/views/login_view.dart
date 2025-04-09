@@ -7,6 +7,7 @@ import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
 import 'package:lurichmaxble/app/global_widgets/top_image_login.dart';
 import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -113,9 +114,11 @@ class _LoginViewState extends State<LoginView> {
                 buttonTextColor: Colors.white,
                 buttonColor: AppColors.appColor,
                 buttonText: "SIGN IN",
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    // If form is valid
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.setBool("isLoggedIN", true);
+
                     Get.offAll(HomePage());
                   }
                 },

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
 import 'package:lurichmaxble/app/modules/splash_screen/views/splash_view_2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -12,12 +15,21 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SplashView2()),
-      );
-    });
+    isLogin();
+  }
+
+  void isLogin() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    var isLogin = prefs.getBool("isLoggedIN") ?? false;
+
+    if (isLogin) {
+      Get.off(HomePage());
+    } else if (isLogin == false) {
+      Future.delayed(Duration(seconds: 3), () {
+        Get.off(SplashView2());
+      });
+    }
   }
 
   @override
