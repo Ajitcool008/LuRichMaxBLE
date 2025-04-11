@@ -20,6 +20,7 @@ class InputTextField extends StatelessWidget {
       decoration: InputDecoration(
         suffixIcon: suffixWidget,
         hintText: hintText,
+        hintStyle: TextStyle(color: Color(0xffd6d6d6)),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 1, color: AppColors.inputBorderColor),
         ),

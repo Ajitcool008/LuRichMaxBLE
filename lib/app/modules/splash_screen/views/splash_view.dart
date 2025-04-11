@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
 import 'package:lurichmaxble/app/modules/splash_screen/views/splash_view_2.dart';
 
 class SplashView extends StatefulWidget {
@@ -12,20 +10,11 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  var box = GetStorage();
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      bool isLoggedIn = box.read('isLoggedIN') ?? false;
-
-      if (isLoggedIn) {
-        Get.off(HomePage());
-      } else {
-        Future.delayed(Duration(seconds: 3), () {
-          Get.off(SplashView2());
-        });
-      }
+    Future.delayed(Duration(seconds: 3), () {
+      Get.off(SplashView2());
     });
   }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
+import 'package:lurichmaxble/app/modules/authention/views/sign_in_view.dart';
 import 'package:lurichmaxble/app/modules/splash_screen/views/splash_view_3.dart';
 
 class SplashView2 extends StatelessWidget {
@@ -18,7 +18,7 @@ class SplashView2 extends StatelessWidget {
               foregroundColor: Color(0xfff2f4ff),
               backgroundColor: Color(0xfff2f4ff),
               // backgroundImage: AssetImage("assets/images/splash2.png"),
-              radius: 150,
+              radius: 130,
               child: CircleAvatar(
                 radius: 135,
                 backgroundImage: AssetImage("assets/images/splash2.png"),
@@ -51,7 +51,7 @@ class SplashView2 extends StatelessWidget {
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => LoginView()),
+                        MaterialPageRoute(builder: (context) => SigninView()),
                       );
                     },
                     child: Text(

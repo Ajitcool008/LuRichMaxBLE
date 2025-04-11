@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
+import 'package:lurichmaxble/app/modules/authention/views/sign_in_view.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
 
@@ -18,7 +18,7 @@ class SplashView4 extends StatelessWidget {
             CircleAvatar(
               foregroundColor: Color(0xfff2f4ff),
               backgroundColor: Color(0xfff2f4ff),
-              radius: 150,
+              radius: 130,
               child: CircleAvatar(
                 radius: 135,
                 backgroundImage: AssetImage("assets/images/splash4.png"),
@@ -50,7 +50,7 @@ class SplashView4 extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginView()),
+                  MaterialPageRoute(builder: (context) => const SigninView()),
                 );
               },
               buttonWidth: width / 1.9,

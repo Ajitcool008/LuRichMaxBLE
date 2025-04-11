@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:get/get.dart';
 import 'package:lurichmaxble/app/modules/authention/views/create_profile_view.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
@@ -13,13 +14,49 @@ class VerifyOtp extends StatefulWidget {
 }
 
 class _VerifyOtpState extends State<VerifyOtp> {
+  late DateTime endDateTime;
+  Key timerKey = UniqueKey();
+  bool isTimerFinished = false;
+
+  @override
+  void initState() {
+    super.initState();
+    endDateTime = DateTime.now().add(const Duration(seconds: 30));
+  }
+
+  void resetTimer() {
+    print("end timedata$endDateTime");
+
+    setState(() {
+      endDateTime = DateTime.now().add(const Duration(seconds: 30));
+      timerKey = UniqueKey();
+      isTimerFinished = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final data = Get.arguments ?? {};
+    String phoneNumber = data['phoneNumber'] ?? '';
+    String countryCode = data['countryCode'] ?? '';
+    String formattedCountryCode = '+${countryCode.replaceAll(' ', '')}';
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        leading: Card(child: Icon(Icons.arrow_back)),
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+
+          child: Transform.scale(
+            scale: 0.9,
+            child: Card(
+              color: Color(0xffefefef),
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ),
         automaticallyImplyLeading: true,
       ),
       body: SingleChildScrollView(
@@ -39,7 +76,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "An 5 digit code has been sent to +91 9995380399",
+                    "An 5 digit code has been sent to $formattedCountryCode $phoneNumber",
                     style: TextStyle(fontSize: 14),
                   ),
                 ],
@@ -80,34 +117,24 @@ class _VerifyOtpState extends State<VerifyOtp> {
                 buttonColor: AppColors.appColor,
                 buttonText: "VERIFY OTP",
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CreateProfileView(),
-                    ),
-                  );
+                  Get.to(() => CreateProfileView());
                 },
                 buttonWidth: width * 0.91,
               ),
             ),
             SizedBox(height: 20),
             Center(
+              key: timerKey, // Use the unique key here
               child: TimerCountdown(
                 format: CountDownTimerFormat.secondsOnly,
-                endTime: DateTime.now().add(Duration(seconds: 34)),
+                endTime: endDateTime,
                 onEnd: () {
                   print("Timer finished");
+                  isTimerFinished = true;
                 },
               ),
             ),
-            // Center(
-            //   child: Text(
-            //     "00:120 Sec",
-            //     style: TextStyle(
-            //       fontSize: 14,
-            //     ),
-            //   ),
-            // ),
+
             SizedBox(height: height / 9),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -116,12 +143,18 @@ class _VerifyOtpState extends State<VerifyOtp> {
                   "Don’t receive code? ",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
-                Text(
-                  "Re-Send",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.appColor,
+                GestureDetector(
+                  onTap: () {
+                    isTimerFinished ? resetTimer() : null;
+                  },
+
+                  child: Text(
+                    "Re-Send",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.appColor,
+                    ),
                   ),
                 ),
               ],

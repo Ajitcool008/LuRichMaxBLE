@@ -1,3 +1,4 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lurichmaxble/app/modules/authention/widgets/validation_input_text_field.dart';
@@ -16,6 +17,20 @@ class CreateProfileView extends StatefulWidget {
 }
 
 class _CreateProfileViewState extends State<CreateProfileView> {
+  Country _selectedCountry = Country(
+    fullExampleWithPlusSign: "+",
+    phoneCode: '1',
+    countryCode: 'US',
+    e164Sc: 0,
+    geographic: true,
+    level: 1,
+    name: 'United States',
+    example: '2015550123',
+    displayName: 'United States',
+    displayNameNoCountryCode: 'United States',
+    e164Key: '',
+  );
+
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   bool isPasswordVisible = true;
@@ -26,11 +41,28 @@ class _CreateProfileViewState extends State<CreateProfileView> {
     // double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        leading: Card(color: Color(0xffB0B0B0), child: Icon(Icons.arrow_back)),
+        leading: Transform.scale(
+          scale: 0.9,
+          child: GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Card(
+              color: Color(0xffefefef),
+              child: Icon(Icons.arrow_back),
+            ),
+          ),
+        ),
         automaticallyImplyLeading: true,
+        centerTitle: true,
+        title: Text(
+          "Create Profile",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Column(
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,12 +99,65 @@ class _CreateProfileViewState extends State<CreateProfileView> {
                       style: TextStyle(fontSize: 14, color: Colors.blueGrey),
                     ),
                     SizedBox(height: 5),
-                    ValidationInputTextField(
-                      keyboardType: TextInputType.number,
-                      maxLength: 10,
-                      controller: phoneNumberController,
-                      validator: validatePhoneNumber,
-                      hintText: "Enter Mobile Number",
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          // padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  showCountryPicker(
+                                    context: context,
+                                    showPhoneCode: true,
+                                    onSelect: (Country country) {
+                                      setState(() {
+                                        _selectedCountry = country;
+                                      });
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 15,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(_selectedCountry.flagEmoji),
+                                      const SizedBox(width: 4),
+                                      Text('+${_selectedCountry.phoneCode}'),
+                                      const Icon(Icons.arrow_drop_down),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ValidationInputTextField(
+                                  keyboardType: TextInputType.number,
+                                  maxLength: 10,
+                                  controller: phoneNumberController,
+                                  validator: validatePhoneNumber,
+                                  hintText: "Enter Mobile Number",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10),
                     Text(
@@ -144,6 +229,13 @@ class _CreateProfileViewState extends State<CreateProfileView> {
                   buttonText: "SAVE",
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
+                      Get.snackbar(
+                        "Success",
+                        "Profile Created Successfully",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white,
+                      );
                       Get.offAll(HomePage());
                     }
                   },

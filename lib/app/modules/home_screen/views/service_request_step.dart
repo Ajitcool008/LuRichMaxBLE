@@ -3,6 +3,8 @@ import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
 import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
 
+final _formKey = GlobalKey<FormState>();
+
 class ServiceRequestScreen extends StatefulWidget {
   const ServiceRequestScreen({super.key});
 
@@ -11,7 +13,6 @@ class ServiceRequestScreen extends StatefulWidget {
 }
 
 class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
-  final _formKey = GlobalKey<FormState>();
   final TextEditingController _serviceController = TextEditingController();
 
   final List<String> _services = [

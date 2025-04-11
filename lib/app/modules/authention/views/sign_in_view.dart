@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:lurichmaxble/app/modules/authention/views/forgot_password.dart';
 import 'package:lurichmaxble/app/modules/authention/views/sign_up_1_view.dart';
 import 'package:lurichmaxble/app/modules/authention/widgets/validation_input_text_field.dart';
@@ -11,14 +10,14 @@ import 'package:lurichmaxble/app/modules/home_screen/views/home_view.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class SigninView extends StatefulWidget {
+  const SigninView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<SigninView> createState() => _SigninViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _SigninViewState extends State<SigninView> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -117,8 +116,6 @@ class _LoginViewState extends State<LoginView> {
                 buttonText: "SIGN IN",
                 onTap: () async {
                   if (_formKey.currentState!.validate()) {
-                    var box = GetStorage();
-                    box.write('isLoggedIN', true);
                     Get.offAll(HomePage());
                   }
                 },

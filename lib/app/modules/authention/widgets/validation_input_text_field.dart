@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 
 class ValidationInputTextField extends StatelessWidget {
@@ -32,6 +31,7 @@ class ValidationInputTextField extends StatelessWidget {
       decoration: InputDecoration(
         counterText: "",
         hintText: hintText,
+        hintStyle: TextStyle(color: Color(0xffd6d6d6)),
         suffixIcon: suffixWidget,
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(width: 1, color: AppColors.inputBorderColor),

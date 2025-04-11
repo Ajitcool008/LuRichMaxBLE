@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
+import 'package:lurichmaxble/app/modules/authention/views/sign_in_view.dart';
 import 'package:lurichmaxble/app/modules/authention/widgets/validation_input_text_field.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
@@ -85,7 +85,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       // If form is valid
-                      Get.offAll(LoginView());
+                      Get.offAll(SigninView());
                     }
                   },
                   buttonWidth: width * 0.91,

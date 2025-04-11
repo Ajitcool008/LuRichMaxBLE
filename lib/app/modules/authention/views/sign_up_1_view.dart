@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/app/modules/authention/views/login_view.dart';
 import 'package:lurichmaxble/app/modules/authention/views/sign_up_2_view.dart';
 import 'package:lurichmaxble/core/constants/app_colors.dart';
 import 'package:lurichmaxble/app/global_widgets/common_button.dart';
@@ -113,7 +112,7 @@ class _SignUp1ViewState extends State<SignUp1View> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Looking for service",
+                              "Looking For Service",
                               style: TextStyle(fontSize: 24),
                             ),
                             Text(
@@ -150,15 +149,20 @@ class _SignUp1ViewState extends State<SignUp1View> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "You have an Account? ",
+                "Already have an account? ",
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
-              Text(
-                "Sign In",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.appColor,
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Text(
+                  "Sign In",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.appColor,
+                  ),
                 ),
               ),
             ],
