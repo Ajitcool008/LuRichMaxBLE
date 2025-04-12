@@ -255,23 +255,50 @@ class DateTimeSelectionInterval extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 5),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 35),
-                  child: CustomAutocompleteTextField(
-                    options: [
-                      "Delivery Date",
-                      "Pickup Date",
-                      "Service Date",
-                      "Appointment Date",
-                      "Event Date",
-                      "Inspection Date",
-                    ],
-                    controller: TextEditingController(),
-                    hintText: "Service",
-                    onSelected: (String selected) {
-                      // Handle selection
-                    },
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 7,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 35),
+                        child: CustomAutocompleteTextField(
+                          options: [
+                            "Delivery",
+                            "Pickup",
+                            "Service",
+                            "Appointment",
+                            "Event",
+                            "Inspection",
+                          ],
+                          controller: TextEditingController(),
+                          hintText: "Service(s)",
+                          onSelected: (String selected) {
+                            // Handle selection
+                          },
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 16,
+                        ),
+                        margin: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Text(
+                          'Date',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Center(
                   child: const Text(
