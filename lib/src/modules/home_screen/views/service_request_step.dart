@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
-import 'package:lurichmaxble/src/modules/home_screen/views/home_view.dart';
+import 'package:lurichmaxble/src/modules/home_screen/views/home_view_page.dart';
 
 class ServiceRequestScreen extends StatefulWidget {
   const ServiceRequestScreen({super.key});
@@ -96,7 +96,7 @@ class _ServiceRequestScreenState extends State<ServiceRequestScreen> {
                         // Handle the next action, e.g., navigate to another screen
                         Navigator.pushAndRemoveUntil(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeView()),
+                          MaterialPageRoute(builder: (context) => HomePage()),
                           (route) => false,
                         );
                       }

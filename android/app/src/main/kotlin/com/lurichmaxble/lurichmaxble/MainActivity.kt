@@ -1,4 +1,4 @@
-package com.example.lurichmaxble
+package com.lurichmaxble.lurichmaxble
 
 import io.flutter.embedding.android.FlutterActivity
 

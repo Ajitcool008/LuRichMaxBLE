@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157338042835",
+    "project_id": "lurichmaxble-166d3",
+    "storage_bucket": "lurichmaxble-166d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157338042835:android:00b6573a86ccd18cc42f26",
+        "android_client_info": {
+          "package_name": "com.lurichmaxble.lurichmaxble"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChUDDH64TmaaQXy1kJ1a6f40FIb_WB-EE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

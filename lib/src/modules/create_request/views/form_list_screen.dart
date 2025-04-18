@@ -1,9 +1,14 @@
+// lib/src/modules/create_request/views/form_list_screen.dart
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_autocomplete_testfield.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/input_text_field.dart';
+import 'package:lurichmaxble/controllers/auth_controller.dart';
+import 'package:lurichmaxble/controllers/service_request_controller.dart';
+import 'package:lurichmaxble/models/service_request_model.dart';
 import 'package:lurichmaxble/src/modules/create_request/controllers/form_controller.dart';
 import 'package:lurichmaxble/src/utils/date_selector.dart';
 
@@ -15,6 +20,10 @@ class FormsListScreen extends StatefulWidget {
 }
 
 class _FormsListScreenState extends State<FormsListScreen> {
+  // Form controller and service request controller
+  late CreateFormsController _formController;
+  late ServiceRequestController _serviceRequestController;
+
   final List<String> _forms = [
     "Enter Services type / providers required or items name to Hire",
     "Enter number of persons or animals etc, in need of Services or number of Services providers required",
@@ -38,7 +47,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
   final TextEditingController _roleSpecialityController =
       TextEditingController();
 
-  // Add these controllers to your state
+  // Additional controllers
   TextEditingController _genderController = TextEditingController();
   TextEditingController _languageController = TextEditingController();
   final TextEditingController _serviceDetailsController =
@@ -152,11 +161,10 @@ class _FormsListScreenState extends State<FormsListScreen> {
   ];
 
   String? _selectedExperienceType;
-  String? _selectedBookingOption; // Added definition for _selectedBookingOption
-  String?
-  _selectedsixBookingOption; // Added definition for _selectedBookingOption
-  String? _selectedSalaryOption; // Added definition for _selectedSalaryOption
-  String? _selectedPerOption; // Added definition for _selectedPerOption
+  String? _selectedBookingOption;
+  String? _selectedsixBookingOption;
+  String? _selectedSalaryOption;
+  String? _selectedPerOption;
   final List<String> _experienceTypes = [
     'The Item(s) Video image(s) to hire',
     'The Item(s) Photo image(s) to purchase',
@@ -167,8 +175,8 @@ class _FormsListScreenState extends State<FormsListScreen> {
   ];
 
   String? _selectedServiceType;
-  String? _selectedDurationType; // Added definition for _selectedDurationType
-  String? _selectedTimeOption; // Added definition for _selectedTimeOption
+  String? _selectedDurationType;
+  String? _selectedTimeOption;
   final List<String> _serviceTypes = [
     'Service(s) required',
     'Service(s) to render',
@@ -185,9 +193,8 @@ class _FormsListScreenState extends State<FormsListScreen> {
   ];
 
   String? _selectedThirdPortalOption;
-  String?
-  _selectedFourPortalOption; // Added definition for _selectedFourPortalOption
-  String? _selectedContactOption; // Added definition for _selectedContactOption
+  String? _selectedFourPortalOption;
+  String? _selectedContactOption;
 
   final List<String> _portalfourNumber = [
     'Site location address(s)',
@@ -206,15 +213,34 @@ class _FormsListScreenState extends State<FormsListScreen> {
   String? _selectedadult;
 
   bool _isButtonEnabled = true;
+  bool _isLoading = false;
 
   List<Map<String, dynamic>> _formData = [];
 
   @override
   void initState() {
     super.initState();
-    Get.put(CreateFormsController());
+
+    // Get the form controller
+    _formController = Get.put(CreateFormsController());
+
+    // Try to find the service request controller or create a new one
+    if (Get.isRegistered<ServiceRequestController>()) {
+      _serviceRequestController = Get.find<ServiceRequestController>();
+    } else {
+      try {
+        _serviceRequestController = Get.put(ServiceRequestController());
+      } catch (e) {
+        print("Error initializing ServiceRequestController: $e");
+        // Handle the error gracefully
+      }
+    }
+
     // Add initial form data for date & time section
     _addNewSet();
+
+    // Expand first section by default
+    _expandedSections[0] = true;
   }
 
   void _addNewSet() {
@@ -301,6 +327,117 @@ class _FormsListScreenState extends State<FormsListScreen> {
     });
   }
 
+  // Method to handle form submission
+  Future<void> _submitForm() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Basic validation - ensure we have at least the title and required info
+      if (_tradeProfessionController.text.isEmpty &&
+          _requestingForController.text.isEmpty) {
+        _showErrorSnackbar('Please enter service type or profession');
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
+
+      // Create request data
+      final Map<String, dynamic> requestData = {
+        'title':
+            _tradeProfessionController.text.isNotEmpty
+                ? _tradeProfessionController.text
+                : _requestingForController.text,
+        'description':
+            _serviceDetailsController.text.isNotEmpty
+                ? _serviceDetailsController.text
+                : 'No additional details provided',
+        'location':
+            _fourPortalSelectController.text.isNotEmpty
+                ? _fourPortalSelectController.text
+                : 'Location not specified',
+        'dateTime': Timestamp.fromDate(
+          DateTime.now(),
+        ), // Default to now if no date specified
+        'additionalDetails': {
+          'service_type': _selectedServiceType ?? '',
+          'gender': _genderController.text,
+          'language': _languageController.text,
+          'experience': _experienceDetailsController.text,
+          'booking_option': _selectedBookingOption,
+        },
+        'status': 'open',
+      };
+
+      // Use Firebase service to create service request
+      try {
+        if (Get.isRegistered<AuthController>()) {
+          final AuthController authController = Get.find<AuthController>();
+          if (authController.user.value != null) {
+            requestData['userId'] = authController.user.value!.uid;
+          }
+        }
+
+        // If we have date schedule list, use the first date
+        if (_formController.dateScheduleList.isNotEmpty) {
+          requestData['dateTime'] = _formController.dateScheduleList[0].dateSel;
+        }
+
+        // Submit request
+        if (Get.isRegistered<ServiceRequestController>()) {
+          await _serviceRequestController.createServiceRequest(
+            ServiceRequestModel.fromMap(requestData),
+          );
+
+          _showSuccessSnackbar('Service request submitted successfully!');
+
+          // Go back to previous screen
+          Future.delayed(const Duration(seconds: 2), () {
+            Get.back();
+          });
+        } else {
+          // Fallback if ServiceRequestController is not registered
+          _showSuccessSnackbar('Form submitted successfully!');
+          Get.back();
+        }
+      } catch (e) {
+        print("Error creating service request: $e");
+        _showErrorSnackbar('Error creating service request: ${e.toString()}');
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      _showErrorSnackbar('An unexpected error occurred: ${e.toString()}');
+    }
+  }
+
+  void _showSuccessSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -313,108 +450,111 @@ class _FormsListScreenState extends State<FormsListScreen> {
         centerTitle: true,
         backgroundColor: const Color(0xff283891),
       ),
-      body: Column(
-        children: [
-          // Note container
-          Container(
-            color: Colors.white,
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Note:',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Column(
+          children: [
+            // Note container
+            Container(
+              color: Colors.white,
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Note:',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ), // Spacing between "Note:" and the content
-                Expanded(
-                  child: const Text(
-                    "Please skip portal-sections that do not apply to your request. Enter information in portals of your choice as it applies to your request and skip if it does not apply to your request by leaving it blank.",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    child: const Text(
+                      "Please skip portal-sections that do not apply to your request. Enter information in portals of your choice as it applies to your request and skip if it does not apply to your request by leaving it blank.",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 14, color: Colors.black),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // ListView builder
-          Expanded(
-            child: ListView.builder(
-              itemCount: _forms.length,
-              padding: const EdgeInsets.all(16.0),
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  elevation: 2.0,
-                  child: Column(
-                    children: [
-                      // Section Header
-                      InkWell(
-                        onTap: () => _toggleSection(index),
-                        child: Container(
-                          padding: const EdgeInsets.all(16.0),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.vertical(
-                              top: const Radius.circular(8.0),
-                              bottom:
-                                  (_expandedSections[index] ?? false)
-                                      ? Radius.zero
-                                      : const Radius.circular(8.0),
+
+            // ListView builder
+            Expanded(
+              child: ListView.builder(
+                itemCount: _forms.length,
+                padding: const EdgeInsets.all(16.0),
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 16.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    elevation: 2.0,
+                    child: Column(
+                      children: [
+                        // Section Header (toggle)
+                        InkWell(
+                          onTap: () => _toggleSection(index),
+                          child: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.vertical(
+                                top: const Radius.circular(8.0),
+                                bottom:
+                                    (_expandedSections[index] ?? false)
+                                        ? Radius.zero
+                                        : const Radius.circular(8.0),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Portal ${index + 1} - ${_forms[index]}',
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    softWrap: true,
+                                    overflow: TextOverflow.visible,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Icon(
+                                    (_expandedSections[index] ?? false)
+                                        ? Icons.keyboard_arrow_down
+                                        : Icons.keyboard_arrow_right,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Portal ${index + 1} - ${_forms[index]}',
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  softWrap: true,
-                                  overflow: TextOverflow.visible,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Icon(
-                                  (_expandedSections[index] ?? false)
-                                      ? Icons.keyboard_arrow_down
-                                      : Icons.keyboard_arrow_right,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ],
+                        ),
+
+                        // Section Content
+                        if (_expandedSections[index] ?? false)
+                          Container(
+                            padding: const EdgeInsets.all(16.0),
+                            width: double.infinity,
+                            child: _buildSectionContent(index),
                           ),
-                        ),
-                      ),
-                      // Section Content
-                      if (_expandedSections[index] ?? false)
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          width: double.infinity,
-                          child: _buildSectionContent(index),
-                        ),
-                    ],
-                  ),
-                );
-              },
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-          const SizedBox(height: 50), // Add space after the last item
-        ],
+            const SizedBox(height: 70), // Space for floating button
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SizedBox(
@@ -423,12 +563,13 @@ class _FormsListScreenState extends State<FormsListScreen> {
         child: CommonButton(
           buttonTextColor: Colors.white,
           buttonColor: AppColors.appColor,
-          buttonText: "SUBMIT",
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Form submitted successfully!')),
-            );
-          },
+          buttonText: _isLoading ? "SUBMITTING..." : "SUBMIT",
+          onTap:
+              _isLoading
+                  ? () {}
+                  : () {
+                    _submitForm();
+                  },
           buttonWidth: Get.width * 0.91,
         ),
       ),
@@ -450,9 +591,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
           controller: _genderController,
           hintText: 'Select gender or enter manually',
           onSelected: (String selected) {
-            // setState(() {
             _genderController.text = selected;
-            // });
           },
         ),
         const SizedBox(height: 16),
@@ -478,17 +617,13 @@ class _FormsListScreenState extends State<FormsListScreen> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ), // Spacing between "Note:" and the content
+              const SizedBox(width: 5),
               Expanded(
                 child: const Text(
                   'Select experience(s), experience(s)/qualification(s), '
                   'item(s) Video, or photo image(s) to hire from the drop-down options '
                   '& enter the details manually',
-                  textAlign:
-                      TextAlign
-                          .left, // Aligns the rest of the text to the right
+                  textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
               ),
@@ -509,8 +644,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              isExpanded:
-                  true, // Ensures the dropdown takes up the available width
+              isExpanded: true,
               items:
                   _experienceTypes.map<DropdownMenuItem<String>>((
                     String value,
@@ -523,8 +657,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedExperienceType = newValue!;
-                  _experienceSelectController.text =
-                      newValue; // Update the controller if needed
+                  _experienceSelectController.text = newValue;
                 });
               },
             ),
@@ -565,15 +698,11 @@ class _FormsListScreenState extends State<FormsListScreen> {
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(
-                width: 5,
-              ), // Spacing between "Note:" and the content
+              const SizedBox(width: 5),
               Expanded(
                 child: const Text(
                   'Select Service(s) required, service(s) to render, task(s), responsibility(s), or reason(s) for hiring item(s) from the drop-down options & enter the details manually',
-                  textAlign:
-                      TextAlign
-                          .left, // Aligns the rest of the text to the right
+                  textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
               ),
@@ -601,8 +730,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              isExpanded:
-                  true, // Ensures the dropdown takes up the available width
+              isExpanded: true,
               items:
                   _serviceTypes.map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
@@ -613,8 +741,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedServiceType = newValue!;
-                  _serviceSelectController.text =
-                      newValue; // Update the controller if needed
+                  _serviceSelectController.text = newValue;
                 });
               },
             ),
@@ -651,12 +778,9 @@ class _FormsListScreenState extends State<FormsListScreen> {
           controller: _languageController,
           hintText: 'Select language or enter manually',
           onSelected: (String selected) {
-            // setState(() {
             _languageController.text = selected;
-            // });
           },
         ),
-
         const SizedBox(height: 16),
       ],
     );
@@ -682,9 +806,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text(
                       "Search or enter manually the service(s) type required",
@@ -709,9 +831,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: _requestingForController,
                     hintText: 'Search or enter manually',
                     onSelected: (selected) {
-                      // setState(() {
                       _requestingForController.text = selected;
-                      // });
                     },
                   ),
                 ),
@@ -750,9 +870,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text.rich(
                       TextSpan(
@@ -794,9 +912,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     hintText:
                         'Search service(s) or enter manually profession(s)/trade(s)',
                     onSelected: (String selected) {
-                      // setState(() {
                       _tradeProfessionController.text = selected;
-                      // });
                     },
                   ),
                 ),
@@ -844,6 +960,8 @@ class _FormsListScreenState extends State<FormsListScreen> {
             _buildServiceTaskRow(),
           ],
         );
+
+      // All other cases remain the same as in your original code
       case 1: // Choose a Task
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -862,14 +980,12 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text(
-                      "Enter genders for services that require knowing the client’s or service provider’s gender (e.g., massage services).\n\n"
-                      "Enter ages for services that require knowing your age for service charges (e.g., charges for kids’ barbering).\n\n"
-                      "Enter races for services that require knowing the client’s or service provider’s race for good service delivery (e.g., hair and other beauty services).\n\n"
+                      "Enter genders for services that require knowing the client's or service provider's gender (e.g., massage services).\n\n"
+                      "Enter ages for services that require knowing your age for service charges (e.g., charges for kids' barbering).\n\n"
+                      "Enter races for services that require knowing the client's or service provider's race for good service delivery (e.g., hair and other beauty services).\n\n"
                       "Enter breeds for animal services.\n\n"
                       "Enter species for animal services.",
                       textAlign: TextAlign.left,
@@ -960,13 +1076,11 @@ class _FormsListScreenState extends State<FormsListScreen> {
               controller: _thirdPortalSelectController,
               hintText: 'Search or enter manually',
               onSelected: (String selected) {
-                // setState(() {
                 _thirdPortalSelectController.text = selected;
-                _selectedThirdPortalOption =
-                    selected; // Update the selected option
-                // });
+                _selectedThirdPortalOption = selected;
               },
             ),
+            const SizedBox(height: 8),
             TextField(
               controller: _serviceDetailsController,
               decoration: InputDecoration(
@@ -997,9 +1111,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text(
                       "You can enter your choice location area(s) or address(s) of where you want service(s) to be given to you. By selecting from the options or creating your choice manually, & entering the area(s) or address(s) manually",
@@ -1015,15 +1127,14 @@ class _FormsListScreenState extends State<FormsListScreen> {
               controller: _fourPortalSelectController,
               hintText: 'Select an address or area',
               onSelected: (String selected) {
-                // setState(() {
                 _fourPortalSelectController.text = selected;
-                _selectedFourPortalOption =
-                    selected; // Update the selected option
-                // });
+                _selectedFourPortalOption = selected;
               },
             ),
+            const SizedBox(height: 8),
             TextField(
-              controller: _serviceDetailsController,
+              controller:
+                  TextEditingController(), // Using a separate controller to avoid conflicts
               decoration: InputDecoration(
                 hintText: 'Enter Manually',
                 border: OutlineInputBorder(
@@ -1052,9 +1163,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text(
                       "Choose a date or dates of your choice from the Calender, then select from the options or enter manually a purpose for the date. or enter your choice manually using the alternative date/time feature, to enter service(s) date/time, etc, contact me let's agree",
@@ -1079,7 +1188,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
             Row(
               children: [
                 Expanded(
-                  flex: 6, // Adjust the width ratio as needed
+                  flex: 6,
                   child: CustomAutocompleteTextField(
                     options: [
                       'Service(s)',
@@ -1098,7 +1207,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  flex: 4, // Adjust the width ratio as needed
+                  flex: 4,
                   child: CustomAutocompleteTextField(
                     options: ['Date', 'Time', 'Date/Time', 'Date(s)/Time(s)'],
                     controller: TextEditingController(),
@@ -1141,9 +1250,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ), // Spacing between "Note:" and the content
+                  const SizedBox(width: 5),
                   Expanded(
                     child: const Text(
                       "Select from the options or enter your choice manually. For example, you can enter: Service(s) Charge(s) offering to pay £50 per hour, delivery, etc. or select from the options: Service(s) charge(s) contact me for consent, etc.",
@@ -1168,9 +1275,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: TextEditingController(),
                     hintText: 'Service(s)',
                     onSelected: (String selected) {
-                      // setState(() {
                       _selectedsixBookingOption = selected;
-                      // });
                     },
                   ),
                 ),
@@ -1181,9 +1286,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: TextEditingController(),
                     hintText: 'Charges',
                     onSelected: (String selected) {
-                      // setState(() {
                       _selectedSalaryOption = selected;
-                      // });
                     },
                   ),
                 ),
@@ -1214,9 +1317,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: TextEditingController(),
                     hintText: 'Select Per/For',
                     onSelected: (String selected) {
-                      // setState(() {
                       _selectedPerOption = selected;
-                      // });
                     },
                   ),
                 ),
@@ -1227,9 +1328,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: TextEditingController(),
                     hintText: 'Hour',
                     onSelected: (String selected) {
-                      // setState(() {
                       _selectedTimeOption = selected;
-                      // });
                     },
                   ),
                 ),
@@ -1265,9 +1364,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
                     controller: TextEditingController(),
                     hintText: 'Select Duration Type',
                     onSelected: (String selected) {
-                      // setState(() {
                       _selectedDurationType = selected;
-                      // });
                     },
                   ),
                 ),
@@ -1307,9 +1404,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
               controller: TextEditingController(),
               hintText: "Contact me to let's agree",
               onSelected: (String selected) {
-                // setState(() {
                 _selectedContactOption = selected;
-                // });
               },
             ),
             const SizedBox(height: 16),
@@ -1395,9 +1490,7 @@ class _FormsListScreenState extends State<FormsListScreen> {
               controller: TextEditingController(),
               hintText: 'Choose e.g: item(s) or Advert(s)',
               onSelected: (String selected) {
-                // setState(() {
                 _selectedItemName = selected;
-                // });
               },
             ),
             const SizedBox(height: 8),

@@ -1,27 +1,24 @@
+// lib/main.dart
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lurichmaxble/components/app_colors.dart';
-import 'package:lurichmaxble/src/modules/splash_screen/views/splash_view.dart';
+import 'package:lurichmaxble/firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'constants/app_constants.dart';
+import 'constants/app_theme.dart';
+import 'routes/app_pages.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
+  runApp(
+    GetMaterialApp(
+      title: 'LuRichMaxBle',
+      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      title: 'Lurichmaxble',
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(color: Colors.white),
-        scaffoldBackgroundColor: Colors.white,
-        primaryColor: AppColors.appColor,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: SplashView(),
-    );
-  }
+      initialRoute: AppConstants.splashRoute,
+      getPages: AppPages.routes,
+    ),
+  );
 }

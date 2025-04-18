@@ -3,7 +3,7 @@ import 'package:lurichmaxble/components/app_colors.dart';
 import 'package:lurichmaxble/components/common_button.dart';
 import 'package:lurichmaxble/components/input_text_field.dart';
 import 'package:lurichmaxble/components/top_image_login.dart';
-import 'package:lurichmaxble/src/modules/home_screen/views/home_view.dart';
+import 'package:lurichmaxble/views/home/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
